@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, UserPlus } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Register() {
   const [email, setEmail] = useState('');
@@ -15,7 +16,7 @@ export default function Register() {
     setLoading(true);
     
     try {
-      const response = await fetch('http://localhost:3001/api/register', {
+      const response = await fetch(`${API_URL}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })

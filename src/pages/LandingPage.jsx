@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export default function LandingPage() {
         return;
       }
       
-      const response = await fetch('http://localhost:3001/api/create-checkout-session', {
+      const response = await fetch(`${API_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

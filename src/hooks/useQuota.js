@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../config';
 
 export function useQuota() {
   const [generations, setGenerations] = useState(0);
@@ -23,7 +24,7 @@ export function useQuota() {
     }
 
     try {
-      const response = await fetch('http://localhost:3001/api/quota', {
+      const response = await fetch(`${API_URL}/api/quota`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -51,7 +52,7 @@ export function useQuota() {
     if (!token) return 0;
 
     try {
-      const response = await fetch('http://localhost:3001/api/consume-quota', {
+      const response = await fetch(`${API_URL}/api/consume-quota`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` }
       });

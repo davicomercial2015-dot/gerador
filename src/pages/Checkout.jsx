@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Lock, CheckCircle2, CreditCard } from 'lucide-react';
+import { API_URL } from '../config';
 
 export default function Checkout() {
   const [email, setEmail] = useState('');
@@ -28,7 +29,7 @@ export default function Checkout() {
     
     try {
       // 1. Criar o usuário
-      const response = await fetch('http://localhost:3001/api/register', {
+      const response = await fetch(`${API_URL}/api/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password })
@@ -46,7 +47,7 @@ export default function Checkout() {
       localStorage.setItem('depofast_user', JSON.stringify(data.user));
       
       // 2. Chamar o gateway do Mercado Pago
-      const checkoutResponse = await fetch('http://localhost:3001/api/create-checkout-session', {
+      const checkoutResponse = await fetch(`${API_URL}/api/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
