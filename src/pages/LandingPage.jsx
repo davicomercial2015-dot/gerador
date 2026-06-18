@@ -7,22 +7,6 @@ export default function LandingPage() {
   const navigate = useNavigate();
   const carouselRef = useRef(null);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (carouselRef.current) {
-        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-        if (scrollLeft + clientWidth >= scrollWidth - 10) {
-          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-        } else {
-          // Find the width of one item. Since they might be 40% or 100%, we scroll by one clientWidth or item width.
-          // In CSS scroll-snap, scrolling by a fraction will snap to the next item automatically.
-          carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-        }
-      }
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
-
   const handleStart = () => {
     navigate('/login');
   };
