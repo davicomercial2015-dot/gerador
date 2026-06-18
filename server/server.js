@@ -221,7 +221,8 @@ app.post('/api/create-pix-payment', authenticateToken, async (req, res) => {
         payer: {
           email: req.user.email
         },
-        external_reference: JSON.stringify({ userId: req.user.id, planId, credits })
+        external_reference: JSON.stringify({ userId: req.user.id, planId, credits }),
+        notification_url: 'https://gerador-api-b4fq.onrender.com/api/webhooks/mercadopago'
       }
     });
 
@@ -237,12 +238,14 @@ app.post('/api/create-pix-payment', authenticateToken, async (req, res) => {
 
 // Webhook para receber notificação de pagamento do Mercado Pago
 app.post('/api/webhooks/mercadopago', async (req, res) => {
-  const { action, data } = req.body;
+  const { action, type, data } = req.body;
   
   // Respondemos 200 imediatamente para o MP não ficar enviando repetidamente
   res.status(200).send('OK');
 
-  if (action === 'payment.created' || action === 'payment.updated') {
+  const eventType = action || type;
+
+  if (eventType === 'payment.created' || eventType === 'payment.updated' || eventType === 'payment') {
     try {
       // Usar fetch para buscar os dados do pagamento direto da API do MP
       const paymentId = data.id;
