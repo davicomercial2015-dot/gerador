@@ -10,7 +10,7 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3001;
-const JWT_SECRET = process.env.JWT_SECRET || 'supersecret_depofast_key';
+const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_fallback';
 
 const mpClient = new MercadoPagoConfig({ 
   accessToken: process.env.MP_ACCESS_TOKEN 
