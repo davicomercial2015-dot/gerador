@@ -190,8 +190,8 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
       message: "Redirecionando para o Mercado Pago..."
     });
   } catch (error) {
-    console.error('Erro ao gerar preference MP:', error);
-    res.status(500).json({ error: 'Erro ao gerar checkout' });
+    console.error('Erro ao gerar preferência:', error);
+    res.status(500).json({ error: 'Erro ao criar sessão de checkout: ' + (error.message || error.toString()) });
   }
 });
 
