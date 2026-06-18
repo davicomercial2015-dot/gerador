@@ -41,7 +41,7 @@ export default function LandingPage() {
     <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', color: '#fff', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
       
       {/* Header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 40px', borderBottom: '1px solid #1e293b' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 5%', borderBottom: '1px solid #1e293b' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '24px', fontWeight: 'bold' }}>
           <img src="/download.svg" alt="Logo" style={{ width: '32px', height: '32px' }} />
           Depo Fast
@@ -59,16 +59,16 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '80px 20px', textAlign: 'center' }}>
+      <section style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 5%', textAlign: 'center' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#60a5fa', padding: '8px 16px', borderRadius: '20px', fontSize: '14px', fontWeight: '600', marginBottom: '24px' }}>
           <Zap size={16} /> Aprovado por mais de 10.000 marqueteiros
         </div>
         
-        <h1 style={{ fontSize: '56px', fontWeight: '800', lineHeight: '1.1', marginBottom: '24px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        <h1 style={{ fontSize: 'clamp(36px, 8vw, 64px)', fontWeight: '800', lineHeight: '1.1', marginBottom: '24px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
           Provas sociais ultra-realistas<br/>que disparam suas vendas.
         </h1>
         
-        <p style={{ fontSize: '20px', color: '#94a3b8', maxWidth: '700px', margin: '0 auto 40px auto', lineHeight: '1.5' }}>
+        <p style={{ fontSize: 'clamp(16px, 4vw, 20px)', color: '#94a3b8', maxWidth: '700px', margin: '0 auto 40px auto', lineHeight: '1.5' }}>
           Gere conversas autênticas de WhatsApp, Instagram Direct e comentários de forma rápida. 100% customizável. Sem marca d'água.
         </p>
         
@@ -80,7 +80,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Showcase */}
-      <section style={{ backgroundColor: '#1e293b', padding: '80px 20px', borderTop: '1px solid #334155', borderBottom: '1px solid #334155' }}>
+      <section style={{ backgroundColor: '#1e293b', padding: '60px 5%', borderTop: '1px solid #334155', borderBottom: '1px solid #334155' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '60px' }}>
             <h2 style={{ fontSize: '36px', fontWeight: '800', marginBottom: '16px' }}>Tudo que você precisa em um só lugar</h2>
@@ -119,32 +119,45 @@ export default function LandingPage() {
       </section>
 
       {/* Demonstrations Gallery */}
-      <section style={{ backgroundColor: '#0f172a', padding: '80px 20px' }}>
+      <section style={{ backgroundColor: '#0f172a', padding: '60px 5%' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '36px', fontWeight: '800', marginBottom: '16px' }}>Resultados tão reais que assustam</h2>
           <p style={{ fontSize: '18px', color: '#94a3b8', marginBottom: '40px' }}>Veja o nível de detalhe dos mockups gerados pela nossa ferramenta. Você controla tudo.</p>
           
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-            <div style={{ backgroundColor: '#1e293b', padding: '24px', borderRadius: '16px', border: '1px solid #334155' }}>
-              <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', height: '400px', objectFit: 'contain', borderRadius: '8px', marginBottom: '16px', backgroundColor: '#0f172a' }} />
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff' }}>WhatsApp Dark Mode</h3>
+          <div style={{ 
+            display: 'flex', 
+            overflowX: 'auto', 
+            scrollSnapType: 'x mandatory', 
+            gap: '16px', 
+            paddingBottom: '24px',
+            WebkitOverflowScrolling: 'touch',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none'
+          }}>
+            <style>{`
+              div::-webkit-scrollbar { display: none; }
+            `}</style>
+            
+            <div style={{ flex: '0 0 100%', scrollSnapAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>WhatsApp Dark Mode</h3>
             </div>
             
-            <div style={{ backgroundColor: '#1e293b', padding: '24px', borderRadius: '16px', border: '1px solid #334155' }}>
-              <img src="/2.png" alt="Demonstração Instagram Direct" style={{ width: '100%', height: '400px', objectFit: 'contain', borderRadius: '8px', marginBottom: '16px', backgroundColor: '#0f172a' }} />
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff' }}>Instagram Direct Verificado</h3>
+            <div style={{ flex: '0 0 100%', scrollSnapAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img src="/2.png" alt="Demonstração Instagram Direct" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Instagram Direct Verificado</h3>
             </div>
             
-            <div style={{ backgroundColor: '#1e293b', padding: '24px', borderRadius: '16px', border: '1px solid #334155' }}>
-              <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', height: '400px', objectFit: 'contain', borderRadius: '8px', marginBottom: '16px', backgroundColor: '#0f172a' }} />
-              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff' }}>Postagem de Comentário</h3>
+            <div style={{ flex: '0 0 100%', scrollSnapAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Postagem de Comentário</h3>
             </div>
           </div>
         </div>
       </section>
 
       {/* Pricing Section on Landing Page */}
-      <section id="pricing" style={{ padding: '80px 20px', backgroundColor: '#0f172a' }}>
+      <section id="pricing" style={{ padding: '60px 5%', backgroundColor: '#0f172a' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '60px' }}>
           <h2 style={{ fontSize: '40px', fontWeight: '800', marginBottom: '16px' }}>
             Escale suas Provas Sociais
