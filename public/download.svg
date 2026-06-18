@@ -1,0 +1,21 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad" x1="64" y1="64" x2="448" y2="448">
+      <stop offset="0%" stop-color="#5B5FFF"></stop>
+      <stop offset="100%" stop-color="#7C3AED"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Velocidade -->
+  <rect x="40" y="180" width="90" height="18" rx="9" fill="url(#grad)"></rect>
+  <rect x="20" y="230" width="120" height="18" rx="9" fill="url(#grad)"></rect>
+  <rect x="50" y="280" width="80" height="18" rx="9" fill="url(#grad)"></rect>
+
+  <!-- Balão -->
+  <path d="M180 90C180 60 204 36 234 36H380C430 36 470 76 470 126V276C470 326 430 366 380 366H290L200 446V366H234C204 366 180 342 180 312V90Z" fill="url(#grad)"></path>
+
+  <!-- Aspas -->
+  <path d="M255 150C255 120 275 100 305 100V130C292 130 285 137 285 150V170H315V240H245V170C245 163 248 156 255 150Z" fill="white"></path>
+
+  <path d="M345 150C345 120 365 100 395 100V130C382 130 375 137 375 150V170H405V240H335V170C335 163 338 156 345 150Z" fill="white"></path>
+</svg>
