@@ -177,9 +177,9 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
         // O external_reference é crucial para sabermos de quem é o pagamento no Webhook
         external_reference: JSON.stringify({ userId: req.user.id, planId, credits }),
         back_urls: {
-          success: 'http://localhost:5173/editor',
-          failure: 'http://localhost:5173/',
-          pending: 'http://localhost:5173/'
+          success: 'https://depoofast.netlify.app/editor',
+          failure: 'https://depoofast.netlify.app/',
+          pending: 'https://depoofast.netlify.app/'
         },
         auto_return: 'approved',
       }
