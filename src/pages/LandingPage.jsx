@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check } from 'lucide-react';
+import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
 import { API_URL } from '../config';
 
 export default function LandingPage() {
@@ -25,6 +25,23 @@ export default function LandingPage() {
 
   const handleStart = () => {
     navigate('/login');
+  };
+
+  const handlePrev = () => {
+    if (carouselRef.current) {
+      carouselRef.current.scrollBy({ left: -carouselRef.current.clientWidth, behavior: 'smooth' });
+    }
+  };
+
+  const handleNext = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      if (scrollLeft + clientWidth >= scrollWidth - 10) {
+        carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        carouselRef.current.scrollBy({ left: clientWidth, behavior: 'smooth' });
+      }
+    }
   };
 
   const handleSubscribe = async (planId) => {
@@ -141,39 +158,44 @@ export default function LandingPage() {
           <h2 style={{ fontSize: '36px', fontWeight: '800', marginBottom: '16px' }}>Resultados tão reais que assustam</h2>
           <p style={{ fontSize: '18px', color: '#94a3b8', marginBottom: '40px' }}>Veja o nível de detalhe dos mockups gerados pela nossa ferramenta. Você controla tudo.</p>
           
-          <div 
-            ref={carouselRef}
-            style={{ 
-            display: 'flex', 
-            overflowX: 'auto', 
-            scrollSnapType: 'x mandatory', 
-            gap: '24px', 
-            paddingBottom: '24px',
-            WebkitOverflowScrolling: 'touch',
-            scrollbarWidth: 'none',
-            msOverflowStyle: 'none',
-            justifyContent: 'flex-start'
-          }}>
-            <style>{`
-              div::-webkit-scrollbar { display: none; }
-              .carousel-item {
-                flex: 0 0 100%;
-                scroll-snap-align: center;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                transition: transform 0.3s ease;
-              }
-              @media (min-width: 768px) {
+          <div style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
+            <button 
+              onClick={handlePrev}
+              style={{ position: 'absolute', left: '-20px', top: '50%', transform: 'translateY(-50%)', zIndex: 2, background: '#1e293b', border: '1px solid #334155', borderRadius: '50%', padding: '12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
+              <ChevronLeft size={24} />
+            </button>
+
+            <button 
+              onClick={handleNext}
+              style={{ position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)', zIndex: 2, background: '#1e293b', border: '1px solid #334155', borderRadius: '50%', padding: '12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
+              <ChevronRight size={24} />
+            </button>
+
+            <div 
+              ref={carouselRef}
+              style={{ 
+              display: 'flex', 
+              overflowX: 'auto', 
+              scrollSnapType: 'x mandatory', 
+              gap: '24px', 
+              paddingBottom: '24px',
+              WebkitOverflowScrolling: 'touch',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              justifyContent: 'flex-start',
+              borderRadius: '16px'
+            }}>
+              <style>{`
+                div::-webkit-scrollbar { display: none; }
                 .carousel-item {
-                  flex: 0 0 calc(33.333% - 16px);
-                  max-width: 380px;
+                  flex: 0 0 100%;
+                  scroll-snap-align: center;
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  transition: transform 0.3s ease;
                 }
-                .carousel-wrapper {
-                   justify-content: center;
-                }
-              }
-            `}</style>
+              `}</style>
             
             <div className="carousel-item">
               <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
@@ -189,6 +211,7 @@ export default function LandingPage() {
               <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Postagem de Comentário</h3>
             </div>
+          </div>
           </div>
         </div>
       </section>
