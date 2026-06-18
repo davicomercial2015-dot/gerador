@@ -1,10 +1,27 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check } from 'lucide-react';
 import { API_URL } from '../config';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const carouselRef = useRef(null);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (carouselRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth - 10) {
+          carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        } else {
+          // Find the width of one item. Since they might be 40% or 100%, we scroll by one clientWidth or item width.
+          // In CSS scroll-snap, scrolling by a fraction will snap to the next item automatically.
+          carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+      }
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleStart = () => {
     navigate('/login');
@@ -124,32 +141,52 @@ export default function LandingPage() {
           <h2 style={{ fontSize: '36px', fontWeight: '800', marginBottom: '16px' }}>Resultados tão reais que assustam</h2>
           <p style={{ fontSize: '18px', color: '#94a3b8', marginBottom: '40px' }}>Veja o nível de detalhe dos mockups gerados pela nossa ferramenta. Você controla tudo.</p>
           
-          <div style={{ 
+          <div 
+            ref={carouselRef}
+            style={{ 
             display: 'flex', 
             overflowX: 'auto', 
             scrollSnapType: 'x mandatory', 
-            gap: '16px', 
+            gap: '24px', 
             paddingBottom: '24px',
             WebkitOverflowScrolling: 'touch',
             scrollbarWidth: 'none',
-            msOverflowStyle: 'none'
+            msOverflowStyle: 'none',
+            justifyContent: 'flex-start'
           }}>
             <style>{`
               div::-webkit-scrollbar { display: none; }
+              .carousel-item {
+                flex: 0 0 100%;
+                scroll-snap-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                transition: transform 0.3s ease;
+              }
+              @media (min-width: 768px) {
+                .carousel-item {
+                  flex: 0 0 calc(33.333% - 16px);
+                  max-width: 380px;
+                }
+                .carousel-wrapper {
+                   justify-content: center;
+                }
+              }
             `}</style>
             
-            <div style={{ flex: '0 0 100%', scrollSnapAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+            <div className="carousel-item">
+              <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>WhatsApp Dark Mode</h3>
             </div>
             
-            <div style={{ flex: '0 0 100%', scrollSnapAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src="/2.png" alt="Demonstração Instagram Direct" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+            <div className="carousel-item">
+              <img src="/2.png" alt="Demonstração Instagram Direct" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Instagram Direct Verificado</h3>
             </div>
             
-            <div style={{ flex: '0 0 100%', scrollSnapAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px' }} />
+            <div className="carousel-item">
+              <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Postagem de Comentário</h3>
             </div>
           </div>
