@@ -29,30 +29,7 @@ export default function LandingPage() {
   };
 
   const handleSubscribe = async (planId) => {
-    try {
-      const token = localStorage.getItem('depofast_token');
-      if (!token) {
-        navigate(`/checkout?planId=${planId}`);
-        return;
-      }
-      
-      const response = await fetch(`${API_URL}/api/create-checkout-session`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ planId })
-      });
-      
-      const data = await response.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch (err) {
-      console.error('Erro ao gerar checkout:', err);
-      alert('Houve um erro ao processar o pagamento.');
-    }
+    navigate(`/checkout?planId=${planId}`);
   };
 
   return (

@@ -10,6 +10,8 @@ export default function Checkout() {
   const [loading, setLoading] = useState(false);
   const [pixData, setPixData] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [token, setToken] = useState(localStorage.getItem('depofast_token'));
+  const isLoggedIn = !!token;
   
   const navigate = useNavigate();
   const location = useLocation();
@@ -57,35 +59,39 @@ export default function Checkout() {
   };
 
   const handleCheckout = async (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setError('');
     setLoading(true);
     
     try {
-      // 1. Criar o usuário
-      const response = await fetch(`${API_URL}/api/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      
-      const data = await response.json();
-      
-      if (!response.ok) {
-        // Se o email já existe, talvez ele devesse logar. Por simplicidade no MVP, mostramos erro.
-        throw new Error(data.error || 'Erro ao preparar checkout');
+      let currentToken = token;
+
+      if (!currentToken) {
+        // 1. Criar o usuário
+        const response = await fetch(`${API_URL}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(data.error || 'Erro ao preparar checkout');
+        }
+        
+        localStorage.setItem('depofast_token', data.token);
+        localStorage.setItem('depofast_user', JSON.stringify(data.user));
+        currentToken = data.token;
+        setToken(currentToken);
       }
-      
-      // Salva a sessão
-      localStorage.setItem('depofast_token', data.token);
-      localStorage.setItem('depofast_user', JSON.stringify(data.user));
       
       // 2. Chamar o gateway do Mercado Pago (Pix Transparente)
       const checkoutResponse = await fetch(`${API_URL}/api/create-pix-payment`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${data.token}`
+          'Authorization': `Bearer ${currentToken}`
         },
         body: JSON.stringify({ planId })
       });
@@ -186,29 +192,39 @@ export default function Checkout() {
             </div>
           ) : (
             <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div>
-                <label style={{ display: 'block', color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
-                <input 
-                  type="email" 
-                  value={email}
-                  onChange={e => setEmail(e.target.value)}
-                  required
-                  placeholder="Para onde enviaremos seu acesso?"
-                  style={{ width: '100%', padding: '14px 16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff', fontSize: '16px' }}
-                />
-              </div>
-              <div>
-                <label style={{ display: 'block', color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
-                <input 
-                  type="password" 
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  minLength={6}
-                  placeholder="Mínimo 6 caracteres"
-                  style={{ width: '100%', padding: '14px 16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff', fontSize: '16px' }}
-                />
-              </div>
+              {!isLoggedIn && (
+                <>
+                  <div>
+                    <label style={{ display: 'block', color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
+                    <input 
+                      type="email" 
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      required
+                      placeholder="Para onde enviaremos seu acesso?"
+                      style={{ width: '100%', padding: '14px 16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff', fontSize: '16px' }}
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
+                    <input 
+                      type="password" 
+                      value={password}
+                      onChange={e => setPassword(e.target.value)}
+                      required
+                      minLength={6}
+                      placeholder="Mínimo 6 caracteres"
+                      style={{ width: '100%', padding: '14px 16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff', fontSize: '16px' }}
+                    />
+                  </div>
+                </>
+              )}
+              
+              {isLoggedIn && (
+                <div style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '16px', borderRadius: '12px', fontSize: '15px', textAlign: 'center', marginBottom: '8px' }}>
+                  Você já está logado! Clique abaixo para gerar o Pix e assinar o <b>Plano {selectedPlan.name}</b>.
+                </div>
+              )}
               
               <button type="submit" disabled={loading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#fff', border: 'none', padding: '18px', borderRadius: '12px', fontSize: '18px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', marginTop: '16px', transition: 'transform 0.2s', boxShadow: '0 10px 15px -3px rgba(59, 130, 246, 0.3)', opacity: loading ? 0.7 : 1 }} onMouseOver={e => !loading && (e.currentTarget.style.transform = 'scale(1.02)')} onMouseOut={e => !loading && (e.currentTarget.style.transform = 'scale(1)')}>
                 <CreditCard size={24} /> {loading ? 'Gerando Pix...' : 'Gerar Pix'}
