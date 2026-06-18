@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from './db.js';
 import dotenv from 'dotenv';
-import { MercadoPagoConfig, Preference } from 'mercadopago';
+import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
 
 dotenv.config();
 
@@ -192,6 +192,46 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
   } catch (error) {
     console.error('Erro ao gerar preferência:', error);
     res.status(500).json({ error: 'Erro ao criar sessão de checkout: ' + (error.message || error.toString()) });
+  }
+});
+
+app.post('/api/create-pix-payment', authenticateToken, async (req, res) => {
+  const { planId } = req.body;
+  
+  let unit_price = 0;
+  let credits = 0;
+  let title = '';
+  
+  if (planId === 'plan_iniciante') { unit_price = 9.90; credits = 20; title = 'Plano Starter - 20 Gerações'; }
+  else if (planId === 'plan_pro') { unit_price = 14.90; credits = 50; title = 'Plano Professional - 50 Gerações'; }
+  else if (planId === 'plan_agencia') { unit_price = 19.90; credits = 100; title = 'Plano Scale - 100 Gerações'; }
+
+  if (unit_price === 0) {
+    return res.status(400).json({ error: 'Plano inválido' });
+  }
+
+  try {
+    const payment = new Payment(mpClient);
+    
+    const response = await payment.create({
+      body: {
+        transaction_amount: unit_price,
+        description: title,
+        payment_method_id: 'pix',
+        payer: {
+          email: req.user.email
+        },
+        external_reference: JSON.stringify({ userId: req.user.id, planId, credits })
+      }
+    });
+
+    res.json({ 
+      qr_code_base64: response.point_of_interaction.transaction_data.qr_code_base64,
+      qr_code: response.point_of_interaction.transaction_data.qr_code
+    });
+  } catch (error) {
+    console.error('Erro ao gerar pix:', error);
+    res.status(500).json({ error: 'Erro ao gerar pagamento pix: ' + (error.message || error.toString()) });
   }
 });
 
