@@ -154,20 +154,20 @@ export default function LandingPage() {
 
       {/* Demonstrations Gallery */}
       <section style={{ backgroundColor: '#0f172a', padding: '60px 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center', overflow: 'hidden' }}>
           <h2 style={{ fontSize: '36px', fontWeight: '800', marginBottom: '16px' }}>Resultados tão reais que assustam</h2>
           <p style={{ fontSize: '18px', color: '#94a3b8', marginBottom: '40px' }}>Veja o nível de detalhe dos mockups gerados pela nossa ferramenta. Você controla tudo.</p>
           
-          <div style={{ position: 'relative', maxWidth: '600px', margin: '0 auto' }}>
+          <div style={{ position: 'relative', maxWidth: '400px', margin: '0 auto' }}>
             <button 
               onClick={handlePrev}
-              style={{ position: 'absolute', left: '-20px', top: '50%', transform: 'translateY(-50%)', zIndex: 2, background: '#1e293b', border: '1px solid #334155', borderRadius: '50%', padding: '12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
+              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', padding: '10px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
               <ChevronLeft size={24} />
             </button>
 
             <button 
               onClick={handleNext}
-              style={{ position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)', zIndex: 2, background: '#1e293b', border: '1px solid #334155', borderRadius: '50%', padding: '12px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'rgba(30, 41, 59, 0.8)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '50%', padding: '10px', color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
               <ChevronRight size={24} />
             </button>
 
@@ -177,7 +177,7 @@ export default function LandingPage() {
               display: 'flex', 
               overflowX: 'auto', 
               scrollSnapType: 'x mandatory', 
-              gap: '24px', 
+              gap: '0px', 
               paddingBottom: '24px',
               WebkitOverflowScrolling: 'touch',
               scrollbarWidth: 'none',
@@ -189,7 +189,8 @@ export default function LandingPage() {
                 div::-webkit-scrollbar { display: none; }
                 .carousel-item {
                   flex: 0 0 100%;
-                  scroll-snap-align: center;
+                  min-width: 100%;
+                  scroll-snap-align: start;
                   display: flex;
                   flex-direction: column;
                   align-items: center;
@@ -198,17 +199,17 @@ export default function LandingPage() {
               `}</style>
             
             <div className="carousel-item">
-              <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
+              <img src="/1.png" alt="Demonstração WhatsApp" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>WhatsApp Dark Mode</h3>
             </div>
             
             <div className="carousel-item">
-              <img src="/2.png" alt="Demonstração Instagram Direct" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
+              <img src="/2.png" alt="Demonstração Instagram Direct" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Instagram Direct Verificado</h3>
             </div>
             
             <div className="carousel-item">
-              <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', objectFit: 'contain', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
+              <img src="/3.png" alt="Demonstração Comentário" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: '#fff', marginTop: '16px' }}>Postagem de Comentário</h3>
             </div>
           </div>
