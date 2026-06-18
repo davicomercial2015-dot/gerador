@@ -9,7 +9,7 @@ import { MercadoPagoConfig, Preference } from 'mercadopago';
 dotenv.config();
 
 const app = express();
-const port = 3001;
+const port = process.env.PORT || 3001;
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecret_depofast_key';
 
 const mpClient = new MercadoPagoConfig({ 
