@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, Plus, Camera, Mic, Sticker } from 'lucide-react';
+import { ChevronLeft, Plus, Camera, Mic, Sticker, Video, Phone, Send } from 'lucide-react';
 
 const themeStyles = {
   light: {
@@ -110,7 +110,12 @@ const WhatsApp = ({ data }) => {
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis'
-          }}>{data.waStatus ?? 'Mensagens para mim'}</span>
+          }}>{data.waStatus ?? ''}</span>
+        </div>
+
+        <div style={{ display: 'flex', gap: '16px', color: theme.iconColor, alignItems: 'center' }}>
+          <Video size={24} />
+          <Phone size={22} />
         </div>
       </div>
 
@@ -237,9 +242,8 @@ const WhatsApp = ({ data }) => {
           <span style={{ color: theme.textSecondary }}></span>
           <Sticker size={20} color={theme.iconColor} />
         </div>
-        <Camera size={26} color={theme.iconColor} />
-        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: theme.micBg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Mic size={20} color="#fff" />
+        <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: theme.micBg, display: 'flex', alignItems: 'center', justifyContent: 'center', marginLeft: '4px' }}>
+          <Send size={18} color={theme.containerBg} style={{ marginLeft: '-2px' }} />
         </div>
       </div>
     </div>
