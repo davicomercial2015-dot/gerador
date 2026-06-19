@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight, ChevronDown, MessageCircle } from 'lucide-react';
+import { Camera, MessageSquare, Zap, ArrowRight, Check, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import { useReveal } from '../hooks/useReveal';
 
 export default function LandingPage() {
@@ -13,7 +13,6 @@ export default function LandingPage() {
   const featuresRef = useReveal();
   const galleryRef = useReveal();
   const pricingRef = useReveal();
-  const trustRef = useReveal();
 
   const handleStart = () => {
     navigate('/login');
@@ -50,7 +49,7 @@ export default function LandingPage() {
       <div className="landing-orb landing-orb-3" />
 
       {/* Header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid var(--border-color)', gap: '12px', backgroundColor: 'var(--bg-primary)', position: 'sticky', top: 0, zIndex: 50 }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', gap: '12px', backgroundColor: 'var(--bg-primary)', position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
         <div
           onClick={() => navigate('/')}
           style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.01em' }}>
@@ -79,9 +78,9 @@ export default function LandingPage() {
         
         {/* Left: Copy */}
         <div style={{ flex: '1 1 380px', minWidth: '280px' }} className="stagger-children">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px', '--i': 0 }}>
-            <img src="/download.svg" alt="Depo Fast" style={{ width: '72px', height: '72px' }} />
-            <span style={{ fontSize: '40px', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Depo Fast</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '20px', '--i': 0 }}>
+            <img src="/download.svg" alt="Depo Fast" style={{ width: '48px', height: '48px' }} />
+            <span style={{ fontSize: '32px', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Depo Fast</span>
           </div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 92, 246, 0.08)', color: 'var(--accent-primary)', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: '500', marginBottom: '24px', border: '1px solid rgba(139, 92, 246, 0.15)', '--i': 0 }}>
             <Zap size={14} /> Aprovado por +10.000 marqueteiros
@@ -120,11 +119,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Section divider arrow */}
-      <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0' }}>
-        <ChevronDown size={28} color="var(--text-muted)" style={{ animation: 'scrollArrowBounce 1.8s ease-in-out infinite' }} />
-      </div>
-
       {/* Features Showcase */}
       <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'oklch(10% 0.008 285 / 0.85)', backdropFilter: 'blur(16px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
@@ -157,7 +151,7 @@ export default function LandingPage() {
       </section>
 
       {/* Demonstrations Gallery — auto-carousel */}
-      <section ref={galleryRef} className="reveal" style={{ backgroundColor: 'var(--bg-primary)', padding: 'clamp(48px, 8vh, 80px) 20px' }}>
+      <section ref={galleryRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'oklch(10% 0.008 285 / 0.85)', backdropFilter: 'blur(16px)' }}>
         <div style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '32px', letterSpacing: '-0.02em' }}>Resultados que assustam</h2>
           
@@ -303,20 +297,6 @@ export default function LandingPage() {
           </div>
         </div>
         </div>
-      </section>
-
-      {/* Trust / Bottom CTA */}
-      <section ref={trustRef} className="reveal" style={{ padding: 'clamp(40px, 6vh, 64px) 20px', textAlign: 'center', backgroundColor: 'oklch(10% 0.008 285 / 0.9)' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '32px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Operadora, Hora e Bateria</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Perfis Verificados</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Múltiplas Mensagens</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><Shield size={16} color="var(--accent-primary)" /> Sem Marca D'Água</div>
-        </div>
-        
-        <button onClick={handleStart} className="cta-hover" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '14px 28px', fontSize: '15px', fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}>
-          Começar Agora <ArrowRight size={18} />
-        </button>
       </section>
 
     </div>
