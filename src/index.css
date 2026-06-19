@@ -1007,6 +1007,56 @@ input:checked + .toggle-slider:before {
   }
 }
 
+/* Landing page background: dotted grid */
+.landing-bg-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background-image: radial-gradient(circle, oklch(55% 0.25 285 / 0.08) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+/* Landing page background: gradient orbs */
+.landing-orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+.landing-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: oklch(55% 0.25 285);
+  top: -120px;
+  right: -100px;
+}
+
+.landing-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: oklch(55% 0.2 200);
+  bottom: 20%;
+  left: -150px;
+}
+
+.landing-orb-3 {
+  width: 350px;
+  height: 350px;
+  background: oklch(60% 0.2 330);
+  bottom: -80px;
+  right: 20%;
+}
+
+/* Ensure landing page content is above bg */
+.landing-page > *:not(.landing-bg-grid):not(.landing-orb) {
+  position: relative;
+  z-index: 1;
+}
+
 /* Accessibility: Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,

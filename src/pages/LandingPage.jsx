@@ -41,8 +41,14 @@ export default function LandingPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
+    <div className="landing-page" style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', position: 'relative', overflow: 'hidden' }}>
       
+      {/* Background Effects */}
+      <div className="landing-bg-grid" />
+      <div className="landing-orb landing-orb-1" />
+      <div className="landing-orb landing-orb-2" />
+      <div className="landing-orb landing-orb-3" />
+
       {/* Header */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid var(--border-color)', gap: '12px' }}>
         <div
