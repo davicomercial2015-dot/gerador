@@ -112,7 +112,9 @@ const InstaDirect = ({ data }) => {
           gap: '4px'
         }}>
           
-          {/* Middle Profile Section */}
+          {/* Middle Profile Section + Time Badge */}
+          {data.igShowHeader !== false && (
+          <>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px', marginTop: '16px' }}>
             <div style={{ position: 'relative' }}>
               {data.avatar ? (
@@ -161,6 +163,8 @@ const InstaDirect = ({ data }) => {
           <div style={{ alignSelf: 'center', color: '#a8a8a8', fontSize: '12px', marginBottom: '24px' }}>
             Hoje às {data.time}
           </div>
+          </>
+          )}
 
           {/* Messages */}
           {data.messages.map((msg, index) => {

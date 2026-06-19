@@ -199,22 +199,51 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
       </CollapsibleSection>
 
       {/* Conteúdo da Conversa */}
-      <CollapsibleSection title="Conteúdo da Conversa" defaultOpen={true}>
+      <CollapsibleSection title={activeTab === 'comment' ? 'Comentários' : 'Conteúdo da Conversa'} defaultOpen={true}>
         {activeTab === 'comment' ? (
-          <div className="form-group">
-            <label htmlFor="comment-text">Comentário</label>
-            <textarea 
-              className="form-control" 
-              id="comment-text"
-              value={data.messages[0]?.text || ''} 
-              onChange={(e) => {
-                const newMsgs = [...data.messages];
-                if (!newMsgs[0]) newMsgs.push({ id: Date.now(), type: 'in', text: '', image: null, time: '' });
-                newMsgs[0].text = e.target.value;
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
+            {data.messages.map((msg, index) => (
+              <div key={msg.id} className="message-card message-card-enter" style={{ '--i': Math.min(index, 5) }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Comentário #{index + 1}</span>
+                  {data.messages.length > 1 && (
+                    <button 
+                      aria-label={`Remover comentário ${index + 1}`}
+                      className="btn"
+                      style={{ width: '28px', height: '28px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      onClick={() => {
+                        const newMsgs = data.messages.filter(m => m.id !== msg.id);
+                        onChange('messages', newMsgs);
+                      }}
+                      title="Remover Comentário"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  )}
+                </div>
+                <textarea 
+                  className="form-control" 
+                  value={msg.text} 
+                  onChange={(e) => {
+                    const newMsgs = [...data.messages];
+                    newMsgs[index].text = e.target.value;
+                    onChange('messages', newMsgs);
+                  }} 
+                  placeholder="Digite o comentário..."
+                  style={{ minHeight: '48px' }}
+                />
+              </div>
+            ))}
+            <button 
+              className="btn btn-primary" 
+              onClick={() => {
+                const newMsgs = [...data.messages, { id: Date.now(), type: 'in', text: '', image: null, time: '' }];
                 onChange('messages', newMsgs);
-              }} 
-              placeholder="Digite o comentário..."
-            />
+              }}
+              style={{ width: '100%' }}
+            >
+              <Plus size={18} /> Adicionar Comentário
+            </button>
           </div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
@@ -432,6 +461,19 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
       {/* Instagram Header Settings */}
       {activeTab === 'instagram' && (
         <CollapsibleSection title="Cabeçalho do Instagram" defaultOpen={false}>
+          <div className="toggle-wrapper">
+            <span className="toggle-label" id="ig-header-label">Mostrar Perfil (foto, seguidores, botão)</span>
+            <label className="toggle-switch">
+              <input 
+                type="checkbox" 
+                checked={data.igShowHeader !== false} 
+                onChange={(e) => onChange('igShowHeader', e.target.checked)} 
+                aria-labelledby="ig-header-label"
+              />
+              <span className="toggle-slider"></span>
+            </label>
+          </div>
+
           <div className="form-group">
             <label htmlFor="ig-username">@ Username (Subtítulo do Topo)</label>
             <input type="text" id="ig-username" className="form-control" value={data.igUsername ?? 'divertido_ludico'} onChange={(e) => onChange('igUsername', e.target.value)} />
