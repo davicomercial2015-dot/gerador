@@ -58,7 +58,7 @@ const InstaComment = ({ data }) => {
             <span style={{ fontSize: '12px', color: '#A8A8A8' }}>2 m</span>
           </div>
           <div style={{ fontSize: '14px', marginTop: '4px', wordBreak: 'break-word', lineHeight: '1.4' }}>
-            {data.message}
+            {data.messages[0]?.text || ''}
           </div>
           <div style={{ display: 'flex', gap: '16px', marginTop: '8px', color: '#A8A8A8', fontSize: '12px', fontWeight: '500' }}>
             <span>Responder</span>

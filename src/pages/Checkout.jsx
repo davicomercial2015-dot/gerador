@@ -38,7 +38,6 @@ export default function Checkout() {
           });
           if (res.ok) {
             const data = await res.json();
-            // Se o plano mudou ou tem créditos, o pagamento foi aprovado
             if (data.plan !== 'free' || data.credits_remaining > 0) {
               clearInterval(interval);
               navigate('/editor');
@@ -67,7 +66,6 @@ export default function Checkout() {
       let currentToken = token;
 
       if (!currentToken) {
-        // 1. Criar o usuário
         const response = await fetch(`${API_URL}/api/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -86,7 +84,6 @@ export default function Checkout() {
         setToken(currentToken);
       }
       
-      // 2. Chamar o gateway do Mercado Pago (Pix Transparente)
       const checkoutResponse = await fetch(`${API_URL}/api/create-pix-payment`, {
         method: 'POST',
         headers: {
@@ -112,10 +109,10 @@ export default function Checkout() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
       <div style={{ width: '100%', maxWidth: '900px', marginBottom: '24px' }}>
-        <button onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}>
+        <button onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
           <ArrowLeft size={20} /> Voltar para o Início
         </button>
       </div>
@@ -123,39 +120,39 @@ export default function Checkout() {
       <div style={{ width: '100%', maxWidth: '900px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
         
         {/* Resumo do Pedido (Esquerda) */}
-        <div style={{ backgroundColor: '#1e293b', padding: '40px', borderRadius: '24px', border: '1px solid #334155', height: 'fit-content' }}>
+        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '24px', border: '1px solid var(--border-color)', height: 'fit-content' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
             <img src="/download.svg" alt="Depo Fast" style={{ width: '32px', height: '32px' }} />
-            <h2 style={{ color: '#fff', fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Depo Fast</h2>
+            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Depo Fast</h2>
           </div>
           
-          <h3 style={{ color: '#94a3b8', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Resumo da Compra</h3>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '24px', borderBottom: '1px solid #334155', marginBottom: '24px' }}>
+          <h3 style={{ color: 'var(--text-secondary)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Resumo da Compra</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '24px', borderBottom: '1px solid var(--border-color)', marginBottom: '24px' }}>
             <div>
-              <div style={{ color: '#fff', fontSize: '20px', fontWeight: 'bold' }}>Plano {selectedPlan.name}</div>
-              <div style={{ color: '#64748b', fontSize: '14px', marginTop: '4px' }}>{selectedPlan.credits} gerações/mês</div>
+              <div style={{ color: 'var(--text-primary)', fontSize: '20px', fontWeight: 'bold' }}>Plano {selectedPlan.name}</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '4px' }}>{selectedPlan.credits} gerações/mês</div>
             </div>
-            <div style={{ color: '#fff', fontSize: '24px', fontWeight: '800' }}>{selectedPlan.price}</div>
+            <div style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '800' }}>{selectedPlan.price}</div>
           </div>
 
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#cbd5e1', fontSize: '15px' }}>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-secondary)', fontSize: '15px' }}>
               <CheckCircle2 size={18} color="#22c55e" /> Liberação imediata após o pagamento
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#cbd5e1', fontSize: '15px' }}>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-secondary)', fontSize: '15px' }}>
               <CheckCircle2 size={18} color="#22c55e" /> Acesso ao gerador sem marca d'água
             </li>
-            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: '#cbd5e1', fontSize: '15px' }}>
+            <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-secondary)', fontSize: '15px' }}>
               <CheckCircle2 size={18} color="#22c55e" /> Imagens em altíssima resolução (PNG)
             </li>
           </ul>
         </div>
 
         {/* Formulário de Cadastro e Pagamento (Direita) */}
-        <div style={{ backgroundColor: '#1e293b', padding: '40px', borderRadius: '24px', border: '1px solid #3b82f6', boxShadow: '0 20px 25px -5px rgba(59, 130, 246, 0.15)' }}>
+        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '24px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-lg)' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <h2 style={{ color: '#fff', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>Finalizar Compra</h2>
-            <p style={{ color: '#94a3b8', fontSize: '14px' }}>Crie seu acesso abaixo para prosseguir para o pagamento seguro no Mercado Pago.</p>
+            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>Finalizar Compra</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Crie seu acesso abaixo para prosseguir para o pagamento seguro no Mercado Pago.</p>
           </div>
 
           {error && <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
@@ -170,22 +167,22 @@ export default function Checkout() {
                 alt="QR Code Pix" 
                 style={{ width: '200px', height: '200px', borderRadius: '16px', margin: '0 auto 24px auto', display: 'block', border: '4px solid #fff' }} 
               />
-              <p style={{ color: '#cbd5e1', fontSize: '14px', marginBottom: '16px' }}>Ou copie o código (Pix Copia e Cola):</p>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '16px' }}>Ou copie o código (Pix Copia e Cola):</p>
               
               <div style={{ display: 'flex', gap: '8px' }}>
                 <input 
                   type="text" 
                   readOnly 
                   value={pixData.qr_code} 
-                  style={{ flex: 1, padding: '12px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '8px', color: '#64748b', fontSize: '12px' }}
+                  style={{ flex: 1, padding: '12px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-muted)', fontSize: '12px' }}
                 />
-                <button onClick={copyPix} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: copied ? '#22c55e' : '#3b82f6', color: '#fff', border: 'none', padding: '0 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'background 0.2s' }}>
+                <button onClick={copyPix} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: copied ? '#22c55e' : 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '0 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'background 0.2s' }}>
                   {copied ? <Check size={18} /> : <Copy size={18} />} {copied ? 'Copiado!' : 'Copiar'}
                 </button>
               </div>
               
-              <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#94a3b8', fontSize: '14px' }}>
-                <div style={{ width: '16px', height: '16px', border: '2px solid #3b82f6', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+              <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+                <div style={{ width: '16px', height: '16px', border: '2px solid var(--accent-primary)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
                 Aguardando confirmação do pagamento...
               </div>
               <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
@@ -195,18 +192,18 @@ export default function Checkout() {
               {!isLoggedIn && (
                 <>
                   <div>
-                    <label style={{ display: 'block', color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
+                    <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
                     <input 
                       type="email" 
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
                       placeholder="Para onde enviaremos seu acesso?"
-                      style={{ width: '100%', padding: '14px 16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff', fontSize: '16px' }}
+                      style={{ width: '100%', padding: '14px 16px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '12px', color: 'var(--text-primary)', fontSize: '16px' }}
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', color: '#cbd5e1', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
+                    <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
                     <input 
                       type="password" 
                       value={password}
@@ -214,23 +211,23 @@ export default function Checkout() {
                       required
                       minLength={6}
                       placeholder="Mínimo 6 caracteres"
-                      style={{ width: '100%', padding: '14px 16px', backgroundColor: '#0f172a', border: '1px solid #334155', borderRadius: '12px', color: '#fff', fontSize: '16px' }}
+                      style={{ width: '100%', padding: '14px 16px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '12px', color: 'var(--text-primary)', fontSize: '16px' }}
                     />
                   </div>
                 </>
               )}
               
               {isLoggedIn && (
-                <div style={{ backgroundColor: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6', padding: '16px', borderRadius: '12px', fontSize: '15px', textAlign: 'center', marginBottom: '8px' }}>
+                <div style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)', color: 'var(--accent-primary)', padding: '16px', borderRadius: '12px', fontSize: '15px', textAlign: 'center', marginBottom: '8px' }}>
                   Você já está logado! Clique abaixo para gerar o Pix e assinar o <b>Plano {selectedPlan.name}</b>.
                 </div>
               )}
               
-              <button type="submit" disabled={loading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#fff', border: 'none', padding: '18px', borderRadius: '12px', fontSize: '18px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', marginTop: '16px', transition: 'transform 0.2s', boxShadow: '0 10px 15px -3px rgba(59, 130, 246, 0.3)', opacity: loading ? 0.7 : 1 }} onMouseOver={e => !loading && (e.currentTarget.style.transform = 'scale(1.02)')} onMouseOut={e => !loading && (e.currentTarget.style.transform = 'scale(1)')}>
+              <button type="submit" disabled={loading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)', color: 'var(--text-primary)', border: 'none', padding: '18px', borderRadius: '12px', fontSize: '18px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', marginTop: '16px', transition: 'transform 0.2s', boxShadow: 'var(--shadow-accent)', opacity: loading ? 0.7 : 1 }} onMouseOver={e => !loading && (e.currentTarget.style.transform = 'scale(1.02)')} onMouseOut={e => !loading && (e.currentTarget.style.transform = 'scale(1)')}>
                 <CreditCard size={24} /> {loading ? 'Gerando Pix...' : 'Gerar Pix'}
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: '#64748b', fontSize: '12px', marginTop: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '12px', marginTop: '8px' }}>
                 <Lock size={14} /> Pagamento 100% seguro via Mercado Pago
               </div>
             </form>

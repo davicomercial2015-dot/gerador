@@ -9,10 +9,19 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
         Depo Fast
       </div>
 
-      <div className="tabs">
+      <div className="tabs" role="tablist">
         <div 
           className={`tab ${activeTab === 'whatsapp' ? 'active' : ''}`}
           onClick={() => setActiveTab('whatsapp')}
+          role="tab"
+          aria-selected={activeTab === 'whatsapp'}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setActiveTab('whatsapp');
+            }
+          }}
         >
           <MessageCircle size={18} style={{ marginBottom: '4px' }} />
           <div>WhatsApp</div>
@@ -20,6 +29,15 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
         <div 
           className={`tab ${activeTab === 'instagram' ? 'active' : ''}`}
           onClick={() => setActiveTab('instagram')}
+          role="tab"
+          aria-selected={activeTab === 'instagram'}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setActiveTab('instagram');
+            }
+          }}
         >
           <Camera size={18} style={{ marginBottom: '4px' }} />
           <div>Insta Direct</div>
@@ -27,6 +45,15 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
         <div 
           className={`tab ${activeTab === 'comment' ? 'active' : ''}`}
           onClick={() => setActiveTab('comment')}
+          role="tab"
+          aria-selected={activeTab === 'comment'}
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setActiveTab('comment');
+            }
+          }}
         >
           <MessageSquare size={18} style={{ marginBottom: '4px' }} />
           <div>Insta Comment</div>
@@ -48,17 +75,17 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
 
       <div className="form-group">
         <label>Foto de Perfil (URL ou Upload)</label>
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <input 
             type="text" 
             className="form-control" 
             value={data.avatar} 
             onChange={(e) => onChange('avatar', e.target.value)} 
             placeholder="https://..."
-            style={{ flex: 1 }}
+            style={{ flex: 1, height: '40px' }}
           />
-          <label className="btn" style={{ padding: '10px', cursor: 'pointer', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Fazer Upload da Foto">
-            <Upload size={18} color="var(--text-secondary)" />
+          <label className="btn" style={{ width: '40px', height: '40px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto">
+            <Upload size={16} color="var(--text-secondary)" />
             <input 
               type="file" 
               accept="image/*" 
@@ -108,14 +135,14 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           />
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', marginBottom: '24px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
           {data.messages.map((msg, index) => (
-            <div key={msg.id} style={{ backgroundColor: 'var(--bg-primary)', padding: '16px', borderRadius: '12px', border: '1px solid var(--border-color)', position: 'relative' }}>
+            <div key={msg.id} style={{ backgroundColor: 'var(--bg-primary)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)', position: 'relative' }}>
               
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                 <select 
                   className="form-control" 
-                  style={{ width: 'auto', padding: '6px 12px' }}
+                  style={{ width: 'auto', padding: '6px 10px', fontSize: '13px' }}
                   value={msg.type}
                   onChange={(e) => {
                     const newMsgs = [...data.messages];
@@ -128,13 +155,13 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                 </select>
 
                 <button 
-                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer' }}
+                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '8px', margin: '-8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '36px', minHeight: '36px' }}
                   onClick={() => {
                     const newMsgs = data.messages.filter(m => m.id !== msg.id);
                     onChange('messages', newMsgs);
                   }}
                 >
-                  <Trash2 size={18} />
+                  <Trash2 size={16} />
                 </button>
               </div>
 
@@ -147,10 +174,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                   onChange('messages', newMsgs);
                 }} 
                 placeholder="Texto da mensagem..."
-                style={{ minHeight: '60px', marginBottom: '12px' }}
+                style={{ minHeight: '56px', marginBottom: '10px' }}
               />
 
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 <input 
                   type="text" 
                   className="form-control" 
@@ -161,11 +188,11 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                     onChange('messages', newMsgs);
                   }}
                   placeholder="Horário (10:42)"
-                  style={{ flex: 1 }}
+                  style={{ flex: 1, height: '36px' }}
                 />
 
-                <label className="btn" style={{ padding: '10px', cursor: 'pointer', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Anexar Imagem ao Balão">
-                  <ImageIcon size={18} color="var(--text-secondary)" />
+                <label className="btn" style={{ width: '36px', height: '36px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Anexar Imagem ao Balão">
+                  <ImageIcon size={16} color="var(--text-secondary)" />
                   <input 
                     type="file" 
                     accept="image/*" 
@@ -188,7 +215,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                 {msg.image && (
                   <button 
                     className="btn" 
-                    style={{ padding: '10px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444' }}
+                    style={{ width: '36px', height: '36px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
                     onClick={() => {
                       const newMsgs = [...data.messages];
                       newMsgs[index].image = null;
@@ -196,7 +223,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                     }}
                     title="Remover Imagem"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 )}
               </div>
@@ -343,8 +370,8 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                 onChange={(e) => onChange('postOwnerAvatar', e.target.value)} 
                 style={{ flex: 1 }}
               />
-              <label className="btn" style={{ padding: '10px', cursor: 'pointer', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} title="Fazer Upload da Foto do Post">
-                <Upload size={18} color="var(--text-secondary)" />
+              <label className="btn" style={{ width: '40px', height: '40px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto do Post">
+                <Upload size={16} color="var(--text-secondary)" />
                 <input 
                   type="file" 
                   accept="image/*" 

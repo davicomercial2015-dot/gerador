@@ -1,23 +1,37 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Editor from './pages/Editor';
+
+// Import estático para a página inicial (acelera LCP e FCP)
 import LandingPage from './pages/LandingPage';
-import Pricing from './pages/Pricing';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Checkout from './pages/Checkout';
+
+// Import dinâmico (lazy load) para as páginas internas (isola pacotes pesados como html2canvas do bundle inicial)
+const Editor = lazy(() => import('./pages/Editor'));
+const Pricing = lazy(() => import('./pages/Pricing'));
+const Login = lazy(() => import('./pages/Login'));
+const Register = lazy(() => import('./pages/Register'));
+const Checkout = lazy(() => import('./pages/Checkout'));
 
 function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/editor" element={<Editor />} />
-        <Route path="/pricing" element={<Pricing />} />
-      </Routes>
+      <Suspense fallback={
+        <div style={{ display: 'flex', height: '100vh', width: '100vw', backgroundColor: '#0f1015', alignItems: 'center', justifyContent: 'center', color: '#f8fafc', fontFamily: 'sans-serif' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px' }}>
+            <div style={{ width: '40px', height: '40px', border: '3px solid #8b5cf6', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+            <span style={{ fontSize: '14px', color: '#94a3b8' }}>Carregando...</span>
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+          </div>
+        </div>
+      }>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/editor" element={<Editor />} />
+          <Route path="/pricing" element={<Pricing />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }
