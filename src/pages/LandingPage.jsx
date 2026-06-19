@@ -69,10 +69,10 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section — split layout */}
-      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: 'clamp(48px, 8vh, 100px) 20px', display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap' }} className="stagger-children">
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: 'clamp(48px, 8vh, 100px) 20px', display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap' }}>
         
         {/* Left: Copy */}
-        <div style={{ flex: '1 1 380px', minWidth: '280px' }}>
+        <div style={{ flex: '1 1 380px', minWidth: '280px' }} className="stagger-children">
           <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '24px', '--i': 0 }}>
             <img src="/download.svg" alt="Depo Fast" style={{ width: '72px', height: '72px' }} />
             <span style={{ fontSize: '40px', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>Depo Fast</span>
