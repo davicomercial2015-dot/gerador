@@ -95,56 +95,93 @@ function Editor() {
   };
 
   return (
-    <div className="app-container">
-      <Sidebar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        data={data} 
-        onChange={handleDataChange} 
-      />
-      
-      <div className="preview-area">
-        <div className="preview-header">
-          <span className="preview-title">Visualização em Tempo Real</span>
-          <div className="preview-actions">
-            {hasQuota ? (
-              <span className="quota-indicator">
-                Você ainda tem <strong>{remaining}</strong> {remaining === 1 ? 'geração grátis' : 'gerações grátis'}
-              </span>
-            ) : (
-              <span className="quota-indicator error">
-                Limite gratuito atingido. Assine um plano para continuar.
-              </span>
-            )}
-            <button className="btn btn-primary" onClick={handleExport} disabled={isExporting} style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '8px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-              <Download size={16} />
-              {isExporting ? 'Gerando Imagem...' : 'Exportar Imagem'}
-            </button>
-          </div>
+    <div className="editor-layout">
+      {/* Barra de Navegação Superior */}
+      <nav className="editor-nav">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => navigate('/')}>
+          <img src="/download.svg" alt="Logo" style={{ width: '28px', height: '28px' }} />
+          <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif" }}>Depo Fast</span>
         </div>
         
-        <div className="mockup-wrapper" ref={mockupRef} style={{ marginTop: '50px' }}>
-          {/* Status Bar */}
-          {activeTab === 'comment' && (
-            <>
-              <div className="mockup-header">
-                <span>{data.time}</span>
-                <div style={{ display: 'flex', gap: '5px' }}>
-                  <Smartphone size={14} />
-                  <span>{data.battery}%</span>
-                </div>
-              </div>
-              <div className="mockup-notch"></div>
-            </>
-          )}
-          
-          {/* Mockup Content */}
-          <div key={activeTab} className="mockup-content-animate" style={{ paddingTop: activeTab === 'comment' ? '44px' : '0', backgroundColor: activeTab === 'whatsapp' ? '#000' : 'var(--ig-bg)' }}>
-            {activeTab === 'whatsapp' && <WhatsApp data={data} />}
-            {activeTab === 'instagram' && <InstaDirect data={data} />}
-            {activeTab === 'comment' && <InstaComment data={data} />}
-          </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <button 
+            className="btn" 
+            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', cursor: 'pointer' }} 
+            onClick={() => navigate('/')}
+          >
+            Início
+          </button>
+          <button 
+            className="btn" 
+            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', cursor: 'pointer' }} 
+            onClick={() => navigate('/pricing')}
+          >
+            Planos
+          </button>
+          <button 
+            className="btn" 
+            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', cursor: 'pointer', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#ef4444' }} 
+            onClick={() => {
+              localStorage.removeItem('depofast_token');
+              navigate('/login');
+            }}
+          >
+            Sair
+          </button>
         </div>
+      </nav>
+
+      <div className="app-container">
+        <Sidebar 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          data={data} 
+          onChange={handleDataChange} 
+        />
+        
+        <main className="preview-area">
+          <div className="preview-header">
+            <span className="preview-title">Visualização em Tempo Real</span>
+            <div className="preview-actions">
+              {hasQuota ? (
+                <span className="quota-indicator">
+                  Você ainda tem <strong>{remaining}</strong> {remaining === 1 ? 'geração grátis' : 'gerações grátis'}
+                </span>
+              ) : (
+                <span className="quota-indicator error">
+                  Limite gratuito atingido. Assine um plano para continuar.
+                </span>
+              )}
+              <button className="btn btn-primary" onClick={handleExport} disabled={isExporting} style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '8px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <Download size={16} />
+                {isExporting ? 'Gerando Imagem...' : 'Exportar Imagem'}
+              </button>
+            </div>
+          </div>
+          
+          <div className="mockup-wrapper" ref={mockupRef} style={{ marginTop: '50px' }}>
+            {/* Status Bar */}
+            {activeTab === 'comment' && (
+              <>
+                <div className="mockup-header">
+                  <span>{data.time}</span>
+                  <div style={{ display: 'flex', gap: '5px' }}>
+                    <Smartphone size={14} />
+                    <span>{data.battery}%</span>
+                  </div>
+                </div>
+                <div className="mockup-notch"></div>
+              </>
+            )}
+            
+            {/* Mockup Content */}
+            <div key={activeTab} className="mockup-content-animate" style={{ paddingTop: activeTab === 'comment' ? '44px' : '0', backgroundColor: activeTab === 'whatsapp' ? '#000' : 'var(--ig-bg)' }}>
+              {activeTab === 'whatsapp' && <WhatsApp data={data} />}
+              {activeTab === 'instagram' && <InstaDirect data={data} />}
+              {activeTab === 'comment' && <InstaComment data={data} />}
+            </div>
+          </div>
+        </main>
       </div>
     </div>
   );

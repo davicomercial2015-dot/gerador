@@ -4,11 +4,6 @@ import { Settings, MessageCircle, Camera, MessageSquare, Upload, Plus, Trash2, I
 const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
   return (
     <div className="sidebar">
-      <div className="logo" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <img src="/download.svg" alt="Depo Fast Logo" style={{ width: '28px', height: '28px' }} />
-        Depo Fast
-      </div>
-
       <div className="tabs" role="tablist">
         <div 
           className={`tab ${activeTab === 'whatsapp' ? 'active' : ''}`}

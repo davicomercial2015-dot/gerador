@@ -89,6 +89,11 @@ body {
   overflow: hidden;
 }
 
+.app-container > nav {
+  display: flex;
+  flex-shrink: 0;
+}
+
 .sidebar {
   width: 380px;
   background-color: var(--bg-secondary);
@@ -412,10 +417,15 @@ input:checked + .toggle-slider:before {
    MOBILE RESPONSIVENESS (Editor / Dashboard)
    ------------------------------------------- */
 @media (max-width: 1024px) {
+  .editor-layout {
+    height: auto;
+    overflow: visible;
+  }
+
   .app-container {
     flex-direction: column;
     height: auto;
-    overflow-y: auto;
+    overflow: visible;
   }
 
   .sidebar {
@@ -481,6 +491,17 @@ input:checked + .toggle-slider:before {
 
 .carousel-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* Landing page CTA buttons */
+.cta-hover {
+  transition: transform 0.2s ease;
+}
+.cta-hover:hover {
+  transform: scale(1.03);
+}
+.cta-hover:active {
+  transform: scale(0.98);
 }
 
 /* Accessibility: Reduced Motion Support */

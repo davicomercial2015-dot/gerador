@@ -41,7 +41,7 @@ export default function LandingPage() {
           <img src="/download.svg" alt="Logo" style={{ width: '32px', height: '32px' }} />
           Depo Fast
         </div>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <nav style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
           <button onClick={() => {
             document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' });
           }} style={{ background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontWeight: '500', fontSize: '16px' }}>
@@ -50,7 +50,7 @@ export default function LandingPage() {
           <button onClick={handleStart} style={{ background: 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '8px 24px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'background 0.2s' }} onMouseOver={e => e.currentTarget.style.background = 'var(--accent-hover)'} onMouseOut={e => e.currentTarget.style.background = 'var(--accent-primary)'}>
             Entrar
           </button>
-        </div>
+        </nav>
       </header>
 
       {/* Hero Section */}

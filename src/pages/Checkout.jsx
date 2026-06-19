@@ -120,7 +120,7 @@ export default function Checkout() {
       <div className="grid-2-cols" style={{ width: '100%', maxWidth: '900px' }}>
         
         {/* Resumo do Pedido (Esquerda) */}
-        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '24px', border: '1px solid var(--border-color)', height: 'fit-content' }}>
+        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '12px', border: '1px solid var(--border-color)', height: 'fit-content' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
             <img src="/download.svg" alt="Depo Fast" style={{ width: '32px', height: '32px' }} />
             <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Depo Fast</h2>
@@ -149,13 +149,13 @@ export default function Checkout() {
         </div>
 
         {/* Formulário de Cadastro e Pagamento (Direita) */}
-        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '24px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-lg)' }}>
+        <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '12px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-lg)' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
             <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>Finalizar Compra</h2>
             <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Crie seu acesso abaixo para prosseguir para o pagamento seguro no Mercado Pago.</p>
           </div>
 
-          {error && <div style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
+          {error && <div role="alert" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
 
           {pixData ? (
             <div style={{ textAlign: 'center' }}>
@@ -192,9 +192,10 @@ export default function Checkout() {
               {!isLoggedIn && (
                 <>
                   <div>
-                    <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
+                    <label htmlFor="checkout-email" style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
                     <input 
                       type="email" 
+                      id="checkout-email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
@@ -203,9 +204,10 @@ export default function Checkout() {
                     />
                   </div>
                   <div>
-                    <label style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
+                    <label htmlFor="checkout-password" style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
                     <input 
                       type="password" 
+                      id="checkout-password"
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       required
