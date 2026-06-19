@@ -1,11 +1,14 @@
-import { useRef } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
 import { useReveal } from '../hooks/useReveal';
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const carouselRef = useRef(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const totalSlides = 3;
+  const autoplayRef = useRef(null);
 
   const featuresRef = useReveal();
   const galleryRef = useReveal();
@@ -16,22 +19,22 @@ export default function LandingPage() {
     navigate('/login');
   };
 
-  const handlePrev = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -carouselRef.current.clientWidth, behavior: 'smooth' });
-    }
-  };
+  const goToSlide = useCallback((index) => {
+    if (!carouselRef.current) return;
+    const clamped = ((index % totalSlides) + totalSlides) % totalSlides;
+    carouselRef.current.scrollTo({ left: clamped * carouselRef.current.clientWidth, behavior: 'smooth' });
+    setActiveSlide(clamped);
+  }, [totalSlides]);
 
-  const handleNext = () => {
-    if (carouselRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      if (scrollLeft + clientWidth >= scrollWidth - 10) {
-        carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        carouselRef.current.scrollBy({ left: clientWidth, behavior: 'smooth' });
-      }
-    }
-  };
+  const handlePrev = () => goToSlide(activeSlide - 1);
+  const handleNext = () => goToSlide(activeSlide + 1);
+
+  useEffect(() => {
+    autoplayRef.current = setInterval(() => {
+      goToSlide(activeSlide + 1);
+    }, 4000);
+    return () => clearInterval(autoplayRef.current);
+  }, [activeSlide, goToSlide]);
 
   const handleSubscribe = async (planId) => {
     navigate(`/checkout?planId=${planId}`);
@@ -65,131 +68,149 @@ export default function LandingPage() {
         </nav>
       </header>
 
-      {/* Hero Section */}
-      <section style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(60px, 10vh, 140px) 20px clamp(40px, 6vh, 100px)', textAlign: 'center' }} className="stagger-children">
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 92, 246, 0.08)', color: 'var(--accent-primary)', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: '500', marginBottom: '32px', border: '1px solid rgba(139, 92, 246, 0.15)', '--i': 0 }}>
-          <Zap size={14} /> Aprovado por +10.000 marqueteiros
+      {/* Hero Section — split layout */}
+      <section style={{ maxWidth: '1100px', margin: '0 auto', padding: 'clamp(48px, 8vh, 100px) 20px', display: 'flex', alignItems: 'center', gap: '48px', flexWrap: 'wrap' }} className="stagger-children">
+        
+        {/* Left: Copy */}
+        <div style={{ flex: '1 1 380px', minWidth: '280px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 92, 246, 0.08)', color: 'var(--accent-primary)', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: '500', marginBottom: '24px', border: '1px solid rgba(139, 92, 246, 0.15)', '--i': 0 }}>
+            <Zap size={14} /> Aprovado por +10.000 marqueteiros
+          </div>
+
+          <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: '800', lineHeight: '1.1', marginBottom: '16px', color: 'var(--text-primary)', letterSpacing: '-0.025em', '--i': 1 }}>
+            Provas sociais que disparam suas vendas.
+          </h1>
+
+          <p style={{ fontSize: 'clamp(15px, 2vw, 17px)', color: 'var(--text-secondary)', maxWidth: '440px', lineHeight: '1.6', marginBottom: '32px', '--i': 2 }}>
+            Gere conversas de WhatsApp, Instagram Direct e comentários com aparência real. 100% customizável. Sem marca d'água.
+          </p>
+
+          <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', '--i': 3 }}>
+            <button onClick={handleStart} className="cta-hover" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '14px 28px', fontSize: '15px', fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}>
+              Começar Grátis <ArrowRight size={18} />
+            </button>
+            <button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', padding: '14px 28px', fontSize: '15px', fontWeight: '500', borderRadius: '8px', cursor: 'pointer' }}>
+              Ver Planos
+            </button>
+          </div>
         </div>
 
-        <h1 style={{ fontSize: 'clamp(28px, 6vw, 56px)', fontWeight: '800', lineHeight: '1.1', marginBottom: '20px', color: 'var(--text-primary)', letterSpacing: '-0.025em', wordBreak: 'normal', overflowWrap: 'break-word', maxWidth: '100%', '--i': 1 }}>
-          Provas sociais ultra-realistas que disparam suas vendas.
-        </h1>
-
-        <p style={{ fontSize: 'clamp(16px, 2.5vw, 18px)', color: 'var(--text-secondary)', maxWidth: '560px', margin: '0 auto 48px auto', lineHeight: '1.6', '--i': 2 }}>
-          Gere conversas autênticas de WhatsApp, Instagram Direct e comentários. 100% customizável. Sem marca d'água.
-        </p>
-
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', '--i': 3 }}>
-          <button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} className="cta-hover" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '14px 28px', fontSize: '15px', fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}>
-            Ver Planos <ArrowRight size={18} />
-          </button>
-          <button onClick={handleStart} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', padding: '14px 28px', fontSize: '15px', fontWeight: '500', borderRadius: '8px', cursor: 'pointer' }}>
-            Testar Grátis
-          </button>
+        {/* Right: Product preview */}
+        <div style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center', '--i': 2 }}>
+          <div style={{
+            width: '260px',
+            aspectRatio: '9 / 16',
+            borderRadius: '28px',
+            overflow: 'hidden',
+            boxShadow: '0 0 0 8px #1a1b21, 0 0 0 10px #2d2f39, 0 24px 48px -12px rgba(0,0,0,0.7), 0 0 60px -15px oklch(55% 0.25 285 / 0.15)',
+            position: 'relative',
+            background: '#000'
+          }}>
+            <img src="/1.png" alt="Preview do mockup WhatsApp" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+          </div>
         </div>
       </section>
 
       {/* Features Showcase */}
-      <section ref={featuresRef} className="reveal" style={{ backgroundColor: 'var(--bg-secondary)', padding: 'clamp(48px, 8vh, 100px) 20px', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+      <section ref={featuresRef} className="reveal" style={{ backgroundColor: 'var(--bg-secondary)', padding: 'clamp(48px, 8vh, 80px) 20px', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '56px' }}>
-            <h2 style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.02em', textWrap: 'balance' }}>Tudo que você precisa em um só lugar</h2>
-            <p style={{ fontSize: '16px', color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto' }}>Diga adeus ao Photoshop. Crie em segundos diretamente do navegador.</p>
-          </div>
-
           <div className="grid-3-cols stagger-children">
             <div className="feature-card" style={{ '--i': 0 }}>
-              <div style={{ backgroundColor: '#22c55e', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ backgroundColor: '#22c55e', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <MessageCircle size={20} color="#fff" />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>WhatsApp Perfeito</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Simule conversas inteiras com suporte a envio de imagens, fotos de perfil dinâmicas e papel de parede nativo.</p>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '6px', letterSpacing: '-0.01em' }}>WhatsApp Perfeito</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.5', fontSize: '14px', margin: 0 }}>Conversas com papel de parede, status, operadora e bateria reais.</p>
             </div>
 
             <div className="feature-card" style={{ '--i': 1 }}>
-              <div style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <Camera size={20} color="#fff" />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>Instagram Direct</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Interface idêntica do IG Direct. Altere seguidores, publicações e simule engajamento de influenciadores.</p>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '6px', letterSpacing: '-0.01em' }}>Instagram Direct</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.5', fontSize: '14px', margin: 0 }}>Perfil verificado, seguidores e botão "Ver perfil" idênticos ao real.</p>
             </div>
 
             <div className="feature-card" style={{ '--i': 2 }}>
-              <div style={{ backgroundColor: 'var(--accent-primary)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+              <div style={{ backgroundColor: 'var(--accent-primary)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <MessageSquare size={20} color="#fff" />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>Comentários Múltiplos</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Crie fluxos de comentários aninhados que imitam o comportamento viral do Instagram.</p>
+              <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '6px', letterSpacing: '-0.01em' }}>Comentários</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.5', fontSize: '14px', margin: 0 }}>Múltiplos comentários com likes e respostas como no Instagram real.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Demonstrations Gallery */}
-      <section ref={galleryRef} className="reveal" style={{ backgroundColor: 'var(--bg-primary)', padding: 'clamp(48px, 8vh, 100px) 20px' }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.02em', textWrap: 'balance' }}>Resultados tão reais que assustam</h2>
-          <p style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '48px', maxWidth: '500px', margin: '0 auto 48px auto' }}>Veja o nível de detalhe dos mockups. Você controla tudo.</p>
+      {/* Demonstrations Gallery — auto-carousel */}
+      <section ref={galleryRef} className="reveal" style={{ backgroundColor: 'var(--bg-primary)', padding: 'clamp(48px, 8vh, 80px) 20px' }}>
+        <div style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'center' }}>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '32px', letterSpacing: '-0.02em' }}>Resultados que assustam</h2>
           
-          <div style={{ position: 'relative', maxWidth: '360px', margin: '0 auto' }}>
-            <button
-              onClick={handlePrev}
-              aria-label="Demonstração anterior"
-              className="carousel-arrow carousel-arrow-left"
-            >
+          <div style={{ position: 'relative' }}>
+            <button onClick={handlePrev} aria-label="Anterior" className="carousel-arrow carousel-arrow-left">
               <ChevronLeft size={20} />
             </button>
-
-            <button
-              onClick={handleNext}
-              aria-label="Próxima demonstração"
-              className="carousel-arrow carousel-arrow-right"
-            >
+            <button onClick={handleNext} aria-label="Próximo" className="carousel-arrow carousel-arrow-right">
               <ChevronRight size={20} />
             </button>
 
             <div 
               ref={carouselRef}
               className="carousel-scroll"
+              onScroll={(e) => {
+                const idx = Math.round(e.target.scrollLeft / e.target.clientWidth);
+                if (idx !== activeSlide) setActiveSlide(idx);
+              }}
               style={{ 
-              display: 'flex', 
-              overflowX: 'auto', 
-              scrollSnapType: 'x mandatory', 
-              gap: '0px', 
-              paddingBottom: '20px',
-              WebkitOverflowScrolling: 'touch',
-              scrollbarWidth: 'none',
-              msOverflowStyle: 'none',
-              justifyContent: 'flex-start',
-              borderRadius: '12px'
-            }}>
-            
-            <div className="carousel-item">
-              <img src="/1.png" alt="Demonstração WhatsApp" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 8px 24px -4px rgba(0,0,0,0.4)' }} />
-              <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)', marginTop: '14px' }}>WhatsApp Dark Mode</p>
+                display: 'flex', 
+                overflowX: 'auto', 
+                scrollSnapType: 'x mandatory', 
+                gap: '0px',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none',
+                borderRadius: '12px'
+              }}>
+              {[{ src: '/1.png', label: 'WhatsApp Dark' }, { src: '/2.png', label: 'IG Direct Verificado' }, { src: '/3.png', label: 'Comentário' }].map((slide, i) => (
+                <div key={i} className="carousel-item">
+                  <img src={slide.src} alt={slide.label} loading={i === 0 ? 'eager' : 'lazy'} style={{ width: '100%', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 8px 24px -4px rgba(0,0,0,0.4)' }} />
+                  <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)', marginTop: '14px' }}>{slide.label}</p>
+                </div>
+              ))}
             </div>
-            
-            <div className="carousel-item">
-              <img src="/2.png" alt="Demonstração Instagram Direct" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 8px 24px -4px rgba(0,0,0,0.4)' }} />
-              <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)', marginTop: '14px' }}>Instagram Direct Verificado</p>
+
+            {/* Dots */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
+              {Array.from({ length: totalSlides }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => goToSlide(i)}
+                  aria-label={`Slide ${i + 1}`}
+                  style={{
+                    width: i === activeSlide ? '24px' : '8px',
+                    height: '8px',
+                    borderRadius: '4px',
+                    border: 'none',
+                    background: i === activeSlide ? 'var(--accent-primary)' : 'var(--border-strong)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s var(--ease-out-quart)',
+                    padding: 0,
+                  }}
+                />
+              ))}
             </div>
-            
-            <div className="carousel-item">
-              <img src="/3.png" alt="Demonstração Comentário" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '12px', boxShadow: '0 8px 24px -4px rgba(0,0,0,0.4)' }} />
-              <p style={{ fontSize: '14px', fontWeight: '500', color: 'var(--text-secondary)', marginTop: '14px' }}>Postagem de Comentário</p>
-            </div>
-          </div>
           </div>
         </div>
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 100px) 20px', backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)' }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '56px' }}>
-          <h2 style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.02em' }}>
+      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)' }}>
+        <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '40px' }}>
+          <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '8px', letterSpacing: '-0.02em' }}>
             Escale suas Provas Sociais
           </h2>
-          <p style={{ fontSize: '16px', color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto' }}>
+          <p style={{ fontSize: '15px', color: 'var(--text-secondary)', maxWidth: '440px', margin: '0 auto' }}>
             Comece de graça. Assine quando precisar de volume.
           </p>
         </div>
@@ -197,89 +218,90 @@ export default function LandingPage() {
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
           <div className="grid-3-cols stagger-children" style={{ alignItems: 'start' }}>
           
-          {/* Plano Iniciante */}
+          {/* Starter */}
           <div className="pricing-card" style={{ '--i': 0 }}>
-            <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: '500', marginBottom: '12px' }}>Starter</h3>
+            <div style={{ marginBottom: '16px' }}>
+              <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', fontWeight: '600' }}>Para testar</span>
+              <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', fontWeight: '700', marginTop: '4px', marginBottom: '8px' }}>Starter</h3>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
-                <span style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>R$</span>
-                <span style={{ fontSize: '40px', fontWeight: '800', lineHeight: '1', letterSpacing: '-0.03em' }}>9,90</span>
-                <span style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>/mês</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>R$</span>
+                <span style={{ fontSize: '36px', fontWeight: '800', lineHeight: '1', letterSpacing: '-0.03em' }}>9,90</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>/mês</span>
               </div>
             </div>
             
-            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px 0', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-              <Feature text="20 depoimentos mensais" highlight />
-              <Feature text="WhatsApp, Insta Direct e Comentários" />
-              <Feature text="Download em Alta Qualidade (PNG)" />
+            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+              <Feature text="20 depoimentos/mês" highlight />
+              <Feature text="WhatsApp, Direct e Comentários" />
+              <Feature text="Download PNG alta qualidade" />
               <Feature text="Sem marca d'água" />
             </ul>
             
-            <button onClick={() => handleSubscribe('plan_iniciante')} style={secondaryBtnStyle}>Assinar Starter</button>
+            <button onClick={() => handleSubscribe('plan_iniciante')} style={secondaryBtnStyle}>Começar</button>
           </div>
 
-          {/* Plano Pro (Destaque) */}
+          {/* Professional */}
           <div className="pricing-card featured" style={{ position: 'relative', '--i': 1 }}>
-            <div className="popular-badge">
-              Popular
-            </div>
+            <div className="popular-badge">Popular</div>
             
-            <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '16px', color: 'var(--text-primary)', fontWeight: '600', marginBottom: '12px' }}>Professional</h3>
+            <div style={{ marginBottom: '16px' }}>
+              <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--accent-primary)', fontWeight: '600' }}>Para vender</span>
+              <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', fontWeight: '700', marginTop: '4px', marginBottom: '8px' }}>Professional</h3>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
-                <span style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>R$</span>
-                <span style={{ fontSize: '40px', fontWeight: '800', lineHeight: '1', letterSpacing: '-0.03em' }}>14,90</span>
-                <span style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>/mês</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>R$</span>
+                <span style={{ fontSize: '36px', fontWeight: '800', lineHeight: '1', letterSpacing: '-0.03em' }}>14,90</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>/mês</span>
               </div>
             </div>
             
-            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px 0', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-              <Feature text="50 depoimentos mensais" highlight />
-              <Feature text="Todos os templates desbloqueados" />
-              <Feature text="Download em Alta Qualidade (PNG)" />
+            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+              <Feature text="50 depoimentos/mês" highlight />
+              <Feature text="Todos os templates" highlight />
+              <Feature text="Download PNG alta qualidade" />
               <Feature text="Sem marca d'água" />
               <Feature text="Suporte prioritário" />
             </ul>
             
-            <button onClick={() => handleSubscribe('plan_pro')} style={primaryBtnStyle}>Assinar Professional</button>
+            <button onClick={() => handleSubscribe('plan_pro')} style={primaryBtnStyle}>Assinar agora</button>
           </div>
 
-          {/* Plano Agência */}
+          {/* Scale */}
           <div className="pricing-card" style={{ '--i': 2 }}>
-            <div style={{ marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: '500', marginBottom: '12px' }}>Scale</h3>
+            <div style={{ marginBottom: '16px' }}>
+              <span style={{ fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--text-muted)', fontWeight: '600' }}>Para agências</span>
+              <h3 style={{ fontSize: '18px', color: 'var(--text-primary)', fontWeight: '700', marginTop: '4px', marginBottom: '8px' }}>Scale</h3>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
-                <span style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>R$</span>
-                <span style={{ fontSize: '40px', fontWeight: '800', lineHeight: '1', letterSpacing: '-0.03em' }}>19,90</span>
-                <span style={{ fontSize: '14px', color: 'var(--text-muted)', marginBottom: '8px' }}>/mês</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>R$</span>
+                <span style={{ fontSize: '36px', fontWeight: '800', lineHeight: '1', letterSpacing: '-0.03em' }}>19,90</span>
+                <span style={{ fontSize: '13px', color: 'var(--text-muted)', marginBottom: '6px' }}>/mês</span>
               </div>
             </div>
             
-            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 28px 0', display: 'flex', flexDirection: 'column', gap: '12px', flex: 1 }}>
-              <Feature text="100 depoimentos mensais" highlight />
-              <Feature text="Acesso antecipado a novos templates" />
-              <Feature text="Download em Alta Qualidade (PNG)" />
+            <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px 0', display: 'flex', flexDirection: 'column', gap: '10px', flex: 1 }}>
+              <Feature text="100 depoimentos/mês" highlight />
+              <Feature text="Novos templates primeiro" />
+              <Feature text="Download PNG alta qualidade" />
               <Feature text="Sem marca d'água" />
               <Feature text="Suporte VIP" />
             </ul>
             
-            <button onClick={() => handleSubscribe('plan_agencia')} style={secondaryBtnStyle}>Assinar Scale</button>
+            <button onClick={() => handleSubscribe('plan_agencia')} style={secondaryBtnStyle}>Assinar</button>
           </div>
         </div>
         </div>
       </section>
 
       {/* Trust / Bottom CTA */}
-      <section ref={trustRef} className="reveal" style={{ padding: 'clamp(40px, 6vh, 80px) 20px', textAlign: 'center', backgroundColor: 'var(--bg-primary)' }}>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '40px' }}>
+      <section ref={trustRef} className="reveal" style={{ padding: 'clamp(40px, 6vh, 64px) 20px', textAlign: 'center', backgroundColor: 'var(--bg-primary)' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Operadora, Hora e Bateria</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Perfis Verificados</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Múltiplas Mensagens</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><Shield size={16} color="var(--accent-primary)" /> Sem Marca D'Água</div>
         </div>
         
-        <button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} className="cta-hover" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '14px 28px', fontSize: '15px', fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}>
-          Ver Planos de Assinatura <ArrowRight size={18} />
+        <button onClick={handleStart} className="cta-hover" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '14px 28px', fontSize: '15px', fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}>
+          Começar Agora <ArrowRight size={18} />
         </button>
       </section>
 

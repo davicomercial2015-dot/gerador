@@ -33,6 +33,7 @@ function Editor() {
       igButtonText: 'Ver perfil',
       igLabel: 'Instagram',
       battery: '100',
+      time: '12:00',
       likes: '1,234',
       postOwnerName: 'seuperfil',
       postOwnerAvatar: savedOwnerAvatar || `https://i.pravatar.cc/150?u=${Math.random().toString(36).substring(7)}`,
