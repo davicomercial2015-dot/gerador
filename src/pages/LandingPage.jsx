@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight, MessageCircle } from 'lucide-react';
+import { Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight, ChevronDown, MessageCircle } from 'lucide-react';
 import { useReveal } from '../hooks/useReveal';
 
 export default function LandingPage() {
@@ -119,6 +119,11 @@ export default function LandingPage() {
           />
         </div>
       </section>
+
+      {/* Section divider arrow */}
+      <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0' }}>
+        <ChevronDown size={28} color="var(--text-muted)" style={{ animation: 'scrollArrowBounce 1.8s ease-in-out infinite' }} />
+      </div>
 
       {/* Features Showcase */}
       <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'oklch(10% 0.008 285 / 0.85)', backdropFilter: 'blur(16px)' }}>
