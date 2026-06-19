@@ -121,7 +121,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Showcase */}
-      <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backdropFilter: 'blur(1px)' }}>
+      <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'oklch(10% 0.008 285 / 0.85)', backdropFilter: 'blur(16px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="grid-3-cols stagger-children">
             <div className="feature-card" style={{ '--i': 0 }}>
@@ -214,7 +214,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px' }}>
+      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'oklch(10% 0.008 285 / 0.85)', backdropFilter: 'blur(16px)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '40px' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '8px', letterSpacing: '-0.02em' }}>
             Escale suas Provas Sociais
@@ -301,7 +301,7 @@ export default function LandingPage() {
       </section>
 
       {/* Trust / Bottom CTA */}
-      <section ref={trustRef} className="reveal" style={{ padding: 'clamp(40px, 6vh, 64px) 20px', textAlign: 'center', backgroundColor: 'var(--bg-primary)' }}>
+      <section ref={trustRef} className="reveal" style={{ padding: 'clamp(40px, 6vh, 64px) 20px', textAlign: 'center', backgroundColor: 'oklch(10% 0.008 285 / 0.9)' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '32px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Operadora, Hora e Bateria</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Perfis Verificados</div>
