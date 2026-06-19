@@ -117,7 +117,7 @@ export default function Checkout() {
         </button>
       </div>
 
-      <div style={{ width: '100%', maxWidth: '900px', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '32px' }}>
+      <div className="grid-2-cols" style={{ width: '100%', maxWidth: '900px' }}>
         
         {/* Resumo do Pedido (Esquerda) */}
         <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '24px', border: '1px solid var(--border-color)', height: 'fit-content' }}>

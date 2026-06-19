@@ -59,7 +59,7 @@ export default function Pricing() {
         </p>
       </div>
 
-      <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', alignItems: 'start' }}>
+      <div className="grid-3-cols" style={{ maxWidth: '1000px', margin: '0 auto', alignItems: 'start' }}>
         
         {/* Plano Iniciante */}
         <div style={pricingCardStyle}>

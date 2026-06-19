@@ -383,6 +383,32 @@ input:checked + .toggle-slider:before {
   background-color: white;
 }
 
+/* Layout Grids */
+.grid-3-cols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.grid-2-cols {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px;
+}
+
+@media (max-width: 968px) {
+  .grid-3-cols {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid-2-cols {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
 /* -------------------------------------------
    MOBILE RESPONSIVENESS (Editor / Dashboard)
    ------------------------------------------- */

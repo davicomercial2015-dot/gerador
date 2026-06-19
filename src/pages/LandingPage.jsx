@@ -82,16 +82,14 @@ export default function LandingPage() {
             <p style={{ fontSize: '18px', color: 'var(--text-secondary)' }}>Diga adeus ao Photoshop. Crie em segundos diretamente do navegador.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
-            {/* Feature 1 - Spans full width on left, larger treatment */}
-            <div style={{ backgroundColor: 'var(--bg-primary)', padding: '40px', borderRadius: '12px', border: '1px solid var(--border-color)', gridColumn: '1 / -1', display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
-              <div style={{ backgroundColor: '#22c55e', width: '56px', height: '56px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <MessageCircle size={28} color="#fff" />
+          <div className="grid-3-cols">
+            {/* Feature 1 */}
+            <div style={{ backgroundColor: 'var(--bg-primary)', padding: '32px', borderRadius: '12px', border: '1px solid var(--border-color)' }}>
+              <div style={{ backgroundColor: '#22c55e', width: '48px', height: '48px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
+                <MessageCircle size={24} color="#fff" />
               </div>
-              <div>
-                <h3 style={{ fontSize: '22px', fontWeight: 'bold', marginBottom: '8px' }}>WhatsApp Perfeito</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', maxWidth: '600px' }}>Simule conversas inteiras com suporte a envio de imagens, fotos de perfil dinâmicas e o papel de parede escuro ou claro nativo.</p>
-              </div>
+              <h3 style={{ fontSize: '20px', fontWeight: 'bold', marginBottom: '8px' }}>WhatsApp Perfeito</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6' }}>Simule conversas inteiras com suporte a envio de imagens, fotos de perfil dinâmicas e o papel de parede escuro ou claro nativo.</p>
             </div>
 
             {/* Feature 2 */}
@@ -192,7 +190,7 @@ export default function LandingPage() {
         </div>
 
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', alignItems: 'start' }}>
+          <div className="grid-3-cols" style={{ alignItems: 'start' }}>
           
           {/* Plano Iniciante */}
           <div style={pricingCardStyle}>
