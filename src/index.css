@@ -989,22 +989,21 @@ input:checked + .toggle-slider:before {
 
 /* Hero mockup floating effect */
 .hero-float {
-  transform: translatey(0px);
   animation: heroFloat 6s ease-in-out infinite;
 }
 
 @keyframes heroFloat {
   0% {
+    transform: translateY(0px) rotate(3deg);
     box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
-    transform: translatey(0px) rotate(3deg);
   }
   50% {
+    transform: translateY(-20px) rotate(3deg);
     box-shadow: 0 25px 15px 0px rgba(0,0,0,0.2);
-    transform: translatey(-20px) rotate(3deg);
   }
   100% {
+    transform: translateY(0px) rotate(3deg);
     box-shadow: 0 5px 15px 0px rgba(0,0,0,0.6);
-    transform: translatey(0px) rotate(3deg);
   }
 }
 
@@ -1023,6 +1022,12 @@ input:checked + .toggle-slider:before {
   .stagger-children > * {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .hero-float {
+    animation: heroFloat 6s ease-in-out infinite !important;
+    animation-duration: 6s !important;
+    animation-iteration-count: infinite !important;
   }
 }
 
