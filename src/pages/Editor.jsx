@@ -104,11 +104,26 @@ function Editor() {
       />
       
       <div className="preview-area">
-        <div className="section-title" style={{ marginTop: 0, position: 'absolute', top: '40px' }}>
-          Visualização em Tempo Real
+        <div className="preview-header">
+          <span className="preview-title">Visualização em Tempo Real</span>
+          <div className="preview-actions">
+            {hasQuota ? (
+              <span className="quota-indicator">
+                Você ainda tem <strong>{remaining}</strong> {remaining === 1 ? 'geração grátis' : 'gerações grátis'}
+              </span>
+            ) : (
+              <span className="quota-indicator error">
+                Limite gratuito atingido. Assine um plano para continuar.
+              </span>
+            )}
+            <button className="btn btn-primary" onClick={handleExport} disabled={isExporting} style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '8px', display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <Download size={16} />
+              {isExporting ? 'Gerando Imagem...' : 'Exportar Imagem'}
+            </button>
+          </div>
         </div>
         
-        <div className="mockup-wrapper" ref={mockupRef}>
+        <div className="mockup-wrapper" ref={mockupRef} style={{ marginTop: '50px' }}>
           {/* Status Bar */}
           {activeTab === 'comment' && (
             <>
@@ -129,22 +144,6 @@ function Editor() {
             {activeTab === 'instagram' && <InstaDirect data={data} />}
             {activeTab === 'comment' && <InstaComment data={data} />}
           </div>
-        </div>
-
-        <div className="export-container" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-          <button className="btn btn-primary" onClick={handleExport} disabled={isExporting} style={{ padding: '14px 28px', fontSize: '15px', borderRadius: '8px', width: '100%', display: 'flex', justifyContent: 'center', gap: '8px', alignItems: 'center' }}>
-            <Download size={18} />
-            {isExporting ? 'Gerando Imagem...' : 'Exportar Imagem em Alta Qualidade'}
-          </button>
-          {hasQuota ? (
-            <div style={{ fontSize: '13px', color: '#8e8e93', marginTop: '4px' }}>
-              Você ainda tem {remaining} {remaining === 1 ? 'geração grátis' : 'gerações grátis'}
-            </div>
-          ) : (
-            <div style={{ fontSize: '13px', color: '#ef4444', marginTop: '4px', fontWeight: 'bold' }}>
-              Limite gratuito atingido. Assine um plano para continuar.
-            </div>
-          )}
         </div>
       </div>
     </div>

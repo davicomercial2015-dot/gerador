@@ -122,8 +122,16 @@ export default function LandingPage() {
           <div style={{ position: 'relative', maxWidth: '400px', margin: '0 auto' }}>
             <button 
               onClick={handlePrev}
-              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '50%', padding: '10px', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-md)' }}>
+              aria-label="Anterior"
+              style={{ position: 'absolute', left: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '50%', padding: '10px', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
               <ChevronLeft size={24} />
+            </button>
+
+            <button 
+              onClick={handleNext}
+              aria-label="Próximo"
+              style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, backgroundColor: 'var(--glass-bg)', border: '1px solid var(--glass-border)', borderRadius: '50%', padding: '10px', color: 'var(--text-primary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.5)' }}>
+              <ChevronRight size={24} />
             </button>
 
             <button 
@@ -146,23 +154,22 @@ export default function LandingPage() {
               justifyContent: 'flex-start',
               borderRadius: '16px'
             }}>
-              <style>{`
-                div::-webkit-scrollbar { display: none; }
-                .carousel-item {
-                  flex: 0 0 100%;
-                  min-width: 100%;
-                  scroll-snap-align: start;
-                  display: flex;
-                  flex-direction: column;
-                  align-items: center;
-                  transition: transform 0.3s ease;
-                }
-              `}</style>
             
             <div className="carousel-item">
-              <img src="/1.png" alt="Demonstração WhatsApp" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} />
+              <img src="/1.png" alt="Demonstração WhatsApp" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', marginTop: '16px' }}>WhatsApp Dark Mode</h3>
             </div>
+            
+            <div className="carousel-item">
+              <img src="/2.png" alt="Demonstração Instagram Direct" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', marginTop: '16px' }}>Instagram Direct Verificado</h3>
+            </div>
+            
+            <div className="carousel-item">
+              <img src="/3.png" alt="Demonstração Comentário" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)' }} />
+              <h3 style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', marginTop: '16px' }}>Postagem de Comentário</h3>
+            </div>
+          </div>
             
             <div className="carousel-item">
               <img src="/2.png" alt="Demonstração Instagram Direct" loading="lazy" style={{ width: '100%', objectFit: 'cover', borderRadius: '16px', boxShadow: 'var(--shadow-lg)' }} />

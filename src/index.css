@@ -21,8 +21,8 @@
   --accent-hover: #9333ea;
   
   --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
+  --text-secondary: #a0aec0;
+  --text-muted: #8a9ab5;
   
   --border-color: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.12);
@@ -469,6 +469,21 @@ input:checked + .toggle-slider:before {
   width: 100%;
 }
 
+/* Carousel */
+.carousel-item {
+  flex: 0 0 100%;
+  min-width: 100%;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.carousel-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 /* Accessibility: Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   * {
@@ -478,3 +493,71 @@ input:checked + .toggle-slider:before {
     scroll-behavior: auto !important;
   }
 }
+
+/* Premium Preview Header Bar */
+.preview-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-xl);
+  background: rgba(22, 24, 31, 0.75);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-color);
+  z-index: 80;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+}
+
+.preview-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.preview-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.quota-indicator {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.quota-indicator strong {
+  color: var(--text-primary);
+}
+
+.quota-indicator.error {
+  color: #ef4444;
+  font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+  .preview-header {
+    position: relative;
+    padding: var(--space-md) 0;
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom: none;
+    flex-direction: column;
+    gap: var(--space-md);
+    width: 100%;
+    margin-bottom: var(--space-lg);
+    box-shadow: none;
+  }
+  
+  .preview-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: var(--space-sm);
+    align-items: center;
+  }
+}
+

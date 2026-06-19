@@ -63,9 +63,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       <div className="section-title">Perfil do Remetente / Comentarista</div>
       
       <div className="form-group">
-        <label>Nome do Usuário</label>
+        <label htmlFor="user-name">Nome do Usuário</label>
         <input 
           type="text" 
+          id="user-name"
           className="form-control" 
           value={data.name} 
           onChange={(e) => onChange('name', e.target.value)} 
@@ -74,17 +75,18 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       </div>
 
       <div className="form-group">
-        <label>Foto de Perfil (URL ou Upload)</label>
+        <label htmlFor="user-avatar">Foto de Perfil (URL ou Upload)</label>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <input 
             type="text" 
+            id="user-avatar"
             className="form-control" 
             value={data.avatar} 
             onChange={(e) => onChange('avatar', e.target.value)} 
             placeholder="https://..."
-            style={{ flex: 1, height: '40px' }}
+            style={{ flex: 1, height: '44px' }}
           />
-          <label className="btn" style={{ width: '40px', height: '40px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto">
+          <label className="btn" style={{ width: '44px', height: '44px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto" aria-label="Upload da foto de perfil">
             <Upload size={16} color="var(--text-secondary)" />
             <input 
               type="file" 
@@ -106,12 +108,13 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       </div>
 
       <div className="toggle-wrapper">
-        <span className="toggle-label">Conta Verificada (Selo Azul)</span>
+        <span className="toggle-label" id="verified-label">Conta Verificada (Selo Azul)</span>
         <label className="toggle-switch">
           <input 
             type="checkbox" 
             checked={data.isVerified} 
             onChange={(e) => onChange('isVerified', e.target.checked)} 
+            aria-labelledby="verified-label"
           />
           <span className="toggle-slider"></span>
         </label>
@@ -121,9 +124,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
 
       {activeTab === 'comment' ? (
         <div className="form-group">
-          <label>Comentário</label>
+          <label htmlFor="comment-text">Comentário</label>
           <textarea 
             className="form-control" 
+            id="comment-text"
             value={data.messages[0]?.text || ''} 
             onChange={(e) => {
               const newMsgs = [...data.messages];
@@ -144,6 +148,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                   className="form-control" 
                   style={{ width: 'auto', padding: '6px 10px', fontSize: '13px' }}
                   value={msg.type}
+                  aria-label={`Tipo da mensagem ${index + 1}`}
                   onChange={(e) => {
                     const newMsgs = [...data.messages];
                     newMsgs[index].type = e.target.value;
@@ -155,7 +160,8 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                 </select>
 
                 <button 
-                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '8px', margin: '-8px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '36px', minHeight: '36px' }}
+                  aria-label={`Remover mensagem ${index + 1}`}
+                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '10px', margin: '-10px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '44px', minHeight: '44px' }}
                   onClick={() => {
                     const newMsgs = data.messages.filter(m => m.id !== msg.id);
                     onChange('messages', newMsgs);
@@ -165,8 +171,12 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                 </button>
               </div>
 
+              <label htmlFor={`msg-text-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+                Texto da mensagem {index + 1}
+              </label>
               <textarea 
                 className="form-control" 
+                id={`msg-text-${msg.id}`}
                 value={msg.text} 
                 onChange={(e) => {
                   const newMsgs = [...data.messages];
@@ -178,8 +188,12 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
               />
 
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <label htmlFor={`msg-time-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+                  Horário da mensagem {index + 1}
+                </label>
                 <input 
                   type="text" 
+                  id={`msg-time-${msg.id}`}
                   className="form-control" 
                   value={msg.time} 
                   onChange={(e) => {
@@ -188,10 +202,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                     onChange('messages', newMsgs);
                   }}
                   placeholder="Horário (10:42)"
-                  style={{ flex: 1, height: '36px' }}
+                  style={{ flex: 1, height: '44px' }}
                 />
 
-                <label className="btn" style={{ width: '36px', height: '36px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Anexar Imagem ao Balão">
+                <label className="btn" style={{ width: '44px', height: '44px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Anexar Imagem ao Balão" aria-label={`Anexar imagem à mensagem ${index + 1}`}>
                   <ImageIcon size={16} color="var(--text-secondary)" />
                   <input 
                     type="file" 
@@ -215,7 +229,8 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                 {msg.image && (
                   <button 
                     className="btn" 
-                    style={{ width: '36px', height: '36px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
+                    aria-label={`Remover imagem da mensagem ${index + 1}`}
+                    style={{ width: '44px', height: '44px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
                     onClick={() => {
                       const newMsgs = [...data.messages];
                       newMsgs[index].image = null;
@@ -249,9 +264,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       
       {activeTab === 'whatsapp' && (
         <div className="form-group">
-          <label>Tema do WhatsApp</label>
+          <label htmlFor="wa-theme">Tema do WhatsApp</label>
           <select 
             className="form-control" 
+            id="wa-theme"
             value={data.waTheme || 'dark'} 
             onChange={(e) => onChange('waTheme', e.target.value)}
           >
@@ -267,23 +283,23 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           
           <div style={{ display: 'flex', gap: '12px' }}>
             <div className="form-group" style={{ flex: 1 }}>
-              <label>Operadora</label>
-              <input type="text" className="form-control" value={data.waCarrier ?? 'TIM 4G'} onChange={(e) => onChange('waCarrier', e.target.value)} />
+              <label htmlFor="wa-carrier">Operadora</label>
+              <input type="text" id="wa-carrier" className="form-control" value={data.waCarrier ?? 'TIM 4G'} onChange={(e) => onChange('waCarrier', e.target.value)} />
             </div>
             <div className="form-group" style={{ flex: 1 }}>
-              <label>Voltar (Núm)</label>
-              <input type="text" className="form-control" value={data.waUnreadCount ?? '12'} onChange={(e) => onChange('waUnreadCount', e.target.value)} />
+              <label htmlFor="wa-unread">Voltar (Núm)</label>
+              <input type="text" id="wa-unread" className="form-control" value={data.waUnreadCount ?? '12'} onChange={(e) => onChange('waUnreadCount', e.target.value)} />
             </div>
           </div>
 
           <div className="form-group">
-            <label>Subtítulo / Status (ex: online, digitando...)</label>
-            <input type="text" className="form-control" value={data.waStatus ?? 'Mensagens para mim'} onChange={(e) => onChange('waStatus', e.target.value)} />
+            <label htmlFor="wa-status">Subtítulo / Status (ex: online, digitando...)</label>
+            <input type="text" id="wa-status" className="form-control" value={data.waStatus ?? 'Mensagens para mim'} onChange={(e) => onChange('waStatus', e.target.value)} />
           </div>
 
           <div className="form-group">
-            <label>Sufixo no Nome</label>
-            <select className="form-control" value={data.waIsMe === false ? 'false' : 'true'} onChange={(e) => onChange('waIsMe', e.target.value === 'true')}>
+            <label htmlFor="wa-isme">Sufixo no Nome</label>
+            <select className="form-control" id="wa-isme" value={data.waIsMe === false ? 'false' : 'true'} onChange={(e) => onChange('waIsMe', e.target.value === 'true')}>
               <option value="true">Mostrar "(Você)"</option>
               <option value="false">Nenhum (Ocultar)</option>
             </select>
@@ -296,29 +312,29 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           <div className="section-title">Cabeçalho e Perfil (Instagram)</div>
           
           <div className="form-group">
-            <label>@ Username (Subtítulo do Topo)</label>
-            <input type="text" className="form-control" value={data.igUsername ?? 'divertido_ludico'} onChange={(e) => onChange('igUsername', e.target.value)} />
+            <label htmlFor="ig-username">@ Username (Subtítulo do Topo)</label>
+            <input type="text" id="ig-username" className="form-control" value={data.igUsername ?? 'divertido_ludico'} onChange={(e) => onChange('igUsername', e.target.value)} />
           </div>
 
           <div style={{ display: 'flex', gap: '12px' }}>
             <div className="form-group" style={{ flex: 1 }}>
-              <label>Rótulo</label>
-              <input type="text" className="form-control" value={data.igLabel ?? 'Instagram'} onChange={(e) => onChange('igLabel', e.target.value)} />
+              <label htmlFor="ig-label">Rótulo</label>
+              <input type="text" id="ig-label" className="form-control" value={data.igLabel ?? 'Instagram'} onChange={(e) => onChange('igLabel', e.target.value)} />
             </div>
             <div className="form-group" style={{ flex: 1 }}>
-              <label>Texto Botão</label>
-              <input type="text" className="form-control" value={data.igButtonText ?? 'Ver perfil'} onChange={(e) => onChange('igButtonText', e.target.value)} />
+              <label htmlFor="ig-btn-text">Texto Botão</label>
+              <input type="text" id="ig-btn-text" className="form-control" value={data.igButtonText ?? 'Ver perfil'} onChange={(e) => onChange('igButtonText', e.target.value)} />
             </div>
           </div>
 
           <div style={{ display: 'flex', gap: '12px' }}>
             <div className="form-group" style={{ flex: 1 }}>
-              <label>Seguidores</label>
-              <input type="text" className="form-control" value={data.igFollowers ?? '3 M de seguidores'} onChange={(e) => onChange('igFollowers', e.target.value)} />
+              <label htmlFor="ig-followers">Seguidores</label>
+              <input type="text" id="ig-followers" className="form-control" value={data.igFollowers ?? '3 M de seguidores'} onChange={(e) => onChange('igFollowers', e.target.value)} />
             </div>
             <div className="form-group" style={{ flex: 1 }}>
-              <label>Publicações</label>
-              <input type="text" className="form-control" value={data.igPosts ?? '120 publicações'} onChange={(e) => onChange('igPosts', e.target.value)} />
+              <label htmlFor="ig-posts">Publicações</label>
+              <input type="text" id="ig-posts" className="form-control" value={data.igPosts ?? '120 publicações'} onChange={(e) => onChange('igPosts', e.target.value)} />
             </div>
           </div>
         </>
@@ -326,18 +342,20 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
 
       <div style={{ display: 'flex', gap: '12px' }}>
         <div className="form-group" style={{ flex: 1 }}>
-          <label>Horário</label>
+          <label htmlFor="device-time">Horário</label>
           <input 
             type="text" 
+            id="device-time"
             className="form-control" 
             value={data.time} 
             onChange={(e) => onChange('time', e.target.value)} 
           />
         </div>
         <div className="form-group" style={{ flex: 1 }}>
-          <label>Bateria (%)</label>
+          <label htmlFor="device-battery">Bateria (%)</label>
           <input 
             type="number" 
+            id="device-battery"
             className="form-control" 
             value={data.battery} 
             onChange={(e) => onChange('battery', e.target.value)} 
