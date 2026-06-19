@@ -193,10 +193,6 @@ textarea.form-control {
   border-color: var(--border-strong);
 }
 
-.btn:hover {
-  background-color: var(--border-color);
-}
-
 .btn:active {
   transform: scale(0.96);
 }
