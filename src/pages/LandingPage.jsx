@@ -88,7 +88,7 @@ export default function LandingPage() {
           </div>
 
           <h1 style={{ fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: '800', lineHeight: '1.1', marginBottom: '16px', color: 'var(--text-primary)', letterSpacing: '-0.025em', '--i': 1 }}>
-            Provas sociais que disparam suas vendas.
+            Provas sociais que disparam suas <span style={{ color: 'var(--accent-primary)' }}>vendas.</span>
           </h1>
 
           <p style={{ fontSize: 'clamp(15px, 2vw, 17px)', color: 'var(--text-secondary)', maxWidth: '440px', lineHeight: '1.6', marginBottom: '32px', '--i': 2 }}>
@@ -121,7 +121,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Showcase */}
-      <section ref={featuresRef} className="reveal" style={{ backgroundColor: 'var(--bg-secondary)', padding: 'clamp(48px, 8vh, 80px) 20px', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+      <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', backdropFilter: 'blur(1px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="grid-3-cols stagger-children">
             <div className="feature-card" style={{ '--i': 0 }}>
@@ -214,7 +214,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)' }}>
+      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', borderTop: '1px solid var(--border-color)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '40px' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '8px', letterSpacing: '-0.02em' }}>
             Escale suas Provas Sociais
