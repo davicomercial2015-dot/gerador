@@ -1168,3 +1168,160 @@ input:checked + .toggle-slider:before {
   }
 }
 
+/* ============================================
+   MOBILE ADAPTATION (Landing Page + Global)
+   ============================================ */
+
+/* Mobile: Landing page hero */
+@media (max-width: 768px) {
+  .landing-page section {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+
+  .stagger-children > * {
+    --i: 0;
+    animation-delay: 0ms;
+  }
+
+  .grid-3-cols {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .feature-card,
+  .pricing-card {
+    padding: 20px 18px;
+  }
+
+  .pricing-card.featured {
+    order: -1;
+  }
+
+  .carousel-arrow {
+    display: none;
+  }
+
+  .toast {
+    left: 16px;
+    right: 16px;
+    bottom: 80px;
+    max-width: none;
+  }
+}
+
+/* Mobile: Editor sidebar first on small screens */
+@media (max-width: 768px) {
+  .sidebar {
+    order: 1;
+    padding: 16px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+
+  .preview-area {
+    order: 2;
+    padding: 24px 16px;
+  }
+
+  .mockup-wrapper {
+    max-width: 300px;
+  }
+
+  .mockup-scroll-indicator {
+    display: none;
+  }
+
+  .btn-floating {
+    bottom: 16px;
+    right: 16px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .tabs {
+    margin-bottom: 12px;
+  }
+
+  .tab {
+    padding: 10px 6px;
+    font-size: 12px;
+  }
+
+  .form-group {
+    margin-bottom: 12px;
+  }
+
+  .form-control {
+    font-size: 16px;
+    padding: 12px 14px;
+  }
+
+  .form-group label {
+    font-size: 12px;
+    margin-bottom: 4px;
+  }
+
+  .message-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .collapsible-section-btn {
+    padding: 6px 0;
+  }
+}
+
+/* Mobile: Auth pages (Login/Register) */
+@media (max-width: 480px) {
+  .auth-card-enter {
+    padding: 24px 20px !important;
+    border-radius: 12px !important;
+  }
+
+  .back-link {
+    margin-bottom: 16px;
+  }
+}
+
+/* Touch: ensure all interactive elements are 44px minimum */
+@media (pointer: coarse) {
+  .btn,
+  .tab,
+  .nav-link,
+  .sidebar-icon-btn,
+  .toggle-switch,
+  .back-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .form-control {
+    min-height: 44px;
+    font-size: 16px;
+  }
+
+  .carousel-arrow {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Landscape mobile: reduce padding */
+@media (max-height: 500px) and (orientation: landscape) {
+  .preview-area {
+    padding: 16px;
+  }
+
+  .mockup-wrapper {
+    max-width: 240px;
+  }
+
+  .btn-floating {
+    bottom: 12px;
+    right: 12px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
