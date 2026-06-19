@@ -97,17 +97,16 @@ export default function LandingPage() {
 
         {/* Right: Product preview */}
         <div style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center', '--i': 2 }}>
-          <div style={{
-            width: '260px',
-            aspectRatio: '9 / 16',
-            borderRadius: '28px',
-            overflow: 'hidden',
-            boxShadow: '0 0 0 8px #1a1b21, 0 0 0 10px #2d2f39, 0 24px 48px -12px rgba(0,0,0,0.7), 0 0 60px -15px oklch(55% 0.25 285 / 0.15)',
-            position: 'relative',
-            background: '#000'
-          }}>
-            <img src="/1.png" alt="Preview do mockup WhatsApp" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          </div>
+          <img
+            src="/1.png"
+            alt="Preview do mockup WhatsApp"
+            style={{
+              width: '260px',
+              borderRadius: '16px',
+              boxShadow: '0 20px 40px -10px rgba(0,0,0,0.6), 0 0 48px -12px oklch(55% 0.25 285 / 0.12)',
+              display: 'block',
+            }}
+          />
         </div>
       </section>
 
