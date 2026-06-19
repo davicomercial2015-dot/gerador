@@ -1018,6 +1018,12 @@ input:checked + .toggle-slider:before {
     opacity: 1 !important;
     transform: none !important;
   }
+
+  .hero-float {
+    animation: heroFloat 8s ease-in-out infinite !important;
+    animation-duration: 8s !important;
+    animation-iteration-count: infinite !important;
+  }
 }
 
 /* Premium Preview Header Bar */
