@@ -18,8 +18,8 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
             }
           }}
         >
-          <MessageCircle size={18} style={{ marginBottom: '4px' }} />
-          <div>WhatsApp</div>
+          <MessageCircle size={15} />
+          <span>WhatsApp</span>
         </div>
         <div 
           className={`tab ${activeTab === 'instagram' ? 'active' : ''}`}
@@ -34,8 +34,8 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
             }
           }}
         >
-          <Camera size={18} style={{ marginBottom: '4px' }} />
-          <div>Insta Direct</div>
+          <Camera size={15} />
+          <span>Direct</span>
         </div>
         <div 
           className={`tab ${activeTab === 'comment' ? 'active' : ''}`}
@@ -50,8 +50,8 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
             }
           }}
         >
-          <MessageSquare size={18} style={{ marginBottom: '4px' }} />
-          <div>Insta Comment</div>
+          <MessageSquare size={15} />
+          <span>Comment</span>
         </div>
       </div>
 
@@ -136,34 +136,39 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
           {data.messages.map((msg, index) => (
-            <div key={msg.id} style={{ backgroundColor: 'var(--bg-primary)', padding: '14px', borderRadius: '10px', border: '1px solid var(--border-color)', position: 'relative' }}>
+            <div key={msg.id} className="message-card" style={{ position: 'relative' }}>
               
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                <select 
-                  className="form-control" 
-                  style={{ width: 'auto', padding: '6px 10px', fontSize: '13px' }}
-                  value={msg.type}
-                  aria-label={`Tipo da mensagem ${index + 1}`}
-                  onChange={(e) => {
-                    const newMsgs = [...data.messages];
-                    newMsgs[index].type = e.target.value;
-                    onChange('messages', newMsgs);
-                  }}
-                >
-                  <option value="in">Recebida (Esq)</option>
-                  <option value="out">Enviada (Dir)</option>
-                </select>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Mensagem #{index + 1}</span>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <select 
+                    className="form-control" 
+                    style={{ width: 'auto', padding: '4px 8px', fontSize: '12px', height: '32px' }}
+                    value={msg.type}
+                    aria-label={`Tipo da mensagem ${index + 1}`}
+                    onChange={(e) => {
+                      const newMsgs = [...data.messages];
+                      newMsgs[index].type = e.target.value;
+                      onChange('messages', newMsgs);
+                    }}
+                  >
+                    <option value="in">Recebida</option>
+                    <option value="out">Enviada</option>
+                  </select>
 
-                <button 
-                  aria-label={`Remover mensagem ${index + 1}`}
-                  style={{ background: 'none', border: 'none', color: '#ef4444', cursor: 'pointer', padding: '10px', margin: '-10px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', minWidth: '44px', minHeight: '44px' }}
-                  onClick={() => {
-                    const newMsgs = data.messages.filter(m => m.id !== msg.id);
-                    onChange('messages', newMsgs);
-                  }}
-                >
-                  <Trash2 size={16} />
-                </button>
+                  <button 
+                    aria-label={`Remover mensagem ${index + 1}`}
+                    className="btn"
+                    style={{ width: '32px', height: '32px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                    onClick={() => {
+                      const newMsgs = data.messages.filter(m => m.id !== msg.id);
+                      onChange('messages', newMsgs);
+                    }}
+                    title="Remover Mensagem"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
               </div>
 
               <label htmlFor={`msg-text-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
@@ -179,7 +184,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                   onChange('messages', newMsgs);
                 }} 
                 placeholder="Texto da mensagem..."
-                style={{ minHeight: '56px', marginBottom: '10px' }}
+                style={{ minHeight: '56px' }}
               />
 
               <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
@@ -197,11 +202,11 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                     onChange('messages', newMsgs);
                   }}
                   placeholder="Horário (10:42)"
-                  style={{ flex: 1, height: '44px' }}
+                  style={{ flex: 1, height: '36px' }}
                 />
 
-                <label className="btn" style={{ width: '44px', height: '44px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Anexar Imagem ao Balão" aria-label={`Anexar imagem à mensagem ${index + 1}`}>
-                  <ImageIcon size={16} color="var(--text-secondary)" />
+                <label className="btn" style={{ width: '36px', height: '36px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Anexar Imagem ao Balão" aria-label={`Anexar imagem à mensagem ${index + 1}`}>
+                  <ImageIcon size={15} color="var(--text-secondary)" />
                   <input 
                     type="file" 
                     accept="image/*" 
@@ -225,7 +230,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                   <button 
                     className="btn" 
                     aria-label={`Remover imagem da mensagem ${index + 1}`}
-                    style={{ width: '44px', height: '44px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
+                    style={{ width: '36px', height: '36px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
                     onClick={() => {
                       const newMsgs = [...data.messages];
                       newMsgs[index].image = null;

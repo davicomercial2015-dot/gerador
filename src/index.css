@@ -112,7 +112,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: radial-gradient(circle at center, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  background: radial-gradient(circle at center, rgba(139, 92, 246, 0.08) 0%, var(--bg-primary) 90%);
   position: relative;
   overflow: hidden;
   padding: 40px;
@@ -161,14 +161,15 @@ body {
   padding: 10px 14px;
   border-radius: 8px;
   font-size: 14px;
-  transition: all 0.15s ease;
+  transition: all 0.2s var(--ease-out-quart);
   font-family: inherit;
 }
 
 .form-control:focus {
   outline: none;
   border-color: var(--accent-primary);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+  background-color: var(--bg-elevated);
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
 }
 
 textarea.form-control {
@@ -238,30 +239,36 @@ textarea.form-control {
 .tabs {
   display: flex;
   background: var(--bg-tertiary);
-  border-radius: 8px;
-  padding: 3px;
+  border-radius: 10px;
+  padding: 4px;
   margin-bottom: var(--space-lg);
+  border: 1px solid var(--border-color);
 }
 
 .tab {
   flex: 1;
-  text-align: center;
-  padding: 8px;
-  font-size: 12px;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 8px;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--text-secondary);
   cursor: pointer;
-  border-radius: 6px;
-  transition: all 0.15s ease;
+  border-radius: 8px;
+  transition: all 0.2s var(--ease-out-quart);
 }
 
-.tab:active {
-  transform: scale(0.97);
+.tab:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.02);
 }
 
 .tab.active {
   background-color: var(--bg-secondary);
   color: var(--text-primary);
+  border: 1px solid var(--border-color);
   box-shadow: var(--shadow-sm);
 }
 
@@ -322,6 +329,23 @@ textarea.form-control {
   margin-top: var(--space-xl);
   display: flex;
   justify-content: center;
+}
+
+/* Custom Message Form Cards */
+.message-card {
+  background-color: var(--bg-primary);
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  transition: all 0.2s var(--ease-out-quart);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 /* Checkbox Toggle */
