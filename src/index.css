@@ -989,8 +989,8 @@ input:checked + .toggle-slider:before {
 
 /* Hero mockup floating effect */
 @keyframes heroFloat {
-  0%, 100% { transform: rotate(-3deg) translateY(0); }
-  50% { transform: rotate(-3deg) translateY(-12px); }
+  0%, 100% { transform: rotate(3deg) translateY(0); }
+  50% { transform: rotate(3deg) translateY(-12px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
