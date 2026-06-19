@@ -210,14 +210,14 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
                     <button 
                       aria-label={`Remover comentário ${index + 1}`}
                       className="btn"
-                      style={{ width: '28px', height: '28px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      style={{ width: '44px', height: '44px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                       onClick={() => {
                         const newMsgs = data.messages.filter(m => m.id !== msg.id);
                         onChange('messages', newMsgs);
                       }}
                       title="Remover Comentário"
                     >
-                      <Trash2 size={12} />
+                      <Trash2 size={14} />
                     </button>
                   )}
                 </div>
@@ -271,14 +271,14 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
                     <button 
                       aria-label={`Remover mensagem ${index + 1}`}
                       className="btn"
-                      style={{ width: '32px', height: '32px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      style={{ width: '44px', height: '44px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
                       onClick={() => {
                         const newMsgs = data.messages.filter(m => m.id !== msg.id);
                         onChange('messages', newMsgs);
                       }}
                       title="Remover Mensagem"
                     >
-                      <Trash2 size={14} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </div>

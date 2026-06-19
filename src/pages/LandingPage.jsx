@@ -9,6 +9,7 @@ export default function LandingPage() {
   const [activeSlide, setActiveSlide] = useState(0);
   const totalSlides = 3;
   const autoplayRef = useRef(null);
+  const [isPaused, setIsPaused] = useState(false);
 
   const featuresRef = useReveal();
   const galleryRef = useReveal();
@@ -29,18 +30,22 @@ export default function LandingPage() {
   const handleNext = () => goToSlide(activeSlide + 1);
 
   useEffect(() => {
+    if (isPaused) {
+      clearInterval(autoplayRef.current);
+      return;
+    }
     autoplayRef.current = setInterval(() => {
       goToSlide(activeSlide + 1);
     }, 4000);
     return () => clearInterval(autoplayRef.current);
-  }, [activeSlide, goToSlide]);
+  }, [activeSlide, goToSlide, isPaused]);
 
   const handleSubscribe = async (planId) => {
     navigate(`/checkout?planId=${planId}`);
   };
 
   return (
-    <div className="landing-page" style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', position: 'relative', overflow: 'hidden' }}>
+    <div className="landing-page" style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', position: 'relative', overflowX: 'hidden' }}>
       
       {/* Background Effects */}
       <div className="landing-bg-grid" />
@@ -50,12 +55,12 @@ export default function LandingPage() {
 
       {/* Header */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', gap: '12px', backgroundColor: 'var(--bg-primary)', position: 'sticky', top: 0, zIndex: 50, boxShadow: '0 4px 20px rgba(0,0,0,0.3)' }}>
-        <div
+        <button
           onClick={() => navigate('/')}
-          style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.01em' }}>
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.01em', background: 'none', border: 'none', color: 'var(--text-primary)', fontFamily: 'inherit', padding: 0 }}>
           <img src="/download.svg" alt="Logo" style={{ width: '28px', height: '28px' }} />
           Depo Fast
-        </div>
+        </button>
         <nav style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <button
             onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })}
@@ -132,7 +137,7 @@ export default function LandingPage() {
             </div>
 
             <div className="feature-card" style={{ '--i': 1 }}>
-              <div style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
+              <div style={{ backgroundColor: '#E4405F', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '16px' }}>
                 <Camera size={20} color="#fff" />
               </div>
               <h3 style={{ fontSize: '16px', fontWeight: '700', marginBottom: '6px', letterSpacing: '-0.01em' }}>Instagram Direct</h3>
@@ -155,7 +160,7 @@ export default function LandingPage() {
         <div style={{ maxWidth: '400px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '32px', letterSpacing: '-0.02em' }}>Resultados que assustam</h2>
           
-          <div style={{ position: 'relative' }}>
+          <div style={{ position: 'relative' }} onMouseEnter={() => setIsPaused(true)} onMouseLeave={() => setIsPaused(false)} onFocus={() => setIsPaused(true)} onBlur={() => setIsPaused(false)}>
             <button onClick={handlePrev} aria-label="Anterior" className="carousel-arrow carousel-arrow-left">
               <ChevronLeft size={20} />
             </button>
@@ -196,16 +201,26 @@ export default function LandingPage() {
                   onClick={() => goToSlide(i)}
                   aria-label={`Slide ${i + 1}`}
                   style={{
+                    width: '44px',
+                    height: '44px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    border: 'none',
+                    background: 'transparent',
+                    cursor: 'pointer',
+                    padding: 0,
+                  }}
+                >
+                  <span style={{
                     width: i === activeSlide ? '24px' : '8px',
                     height: '8px',
                     borderRadius: '4px',
-                    border: 'none',
                     background: i === activeSlide ? 'var(--accent-primary)' : 'var(--border-strong)',
-                    cursor: 'pointer',
                     transition: 'all 0.3s var(--ease-out-quart)',
-                    padding: 0,
-                  }}
-                />
+                    display: 'block',
+                  }} />
+                </button>
               ))}
             </div>
           </div>
@@ -216,7 +231,7 @@ export default function LandingPage() {
       <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backgroundColor: 'oklch(10% 0.008 285 / 0.85)', backdropFilter: 'blur(16px)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '40px' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '8px', letterSpacing: '-0.02em' }}>
-            Escale suas Provas Sociais
+            Escolha seu plano
           </h2>
           <p style={{ fontSize: '15px', color: 'var(--text-secondary)', maxWidth: '440px', margin: '0 auto' }}>
             Comece de graça. Assine quando precisar de volume.
@@ -245,7 +260,7 @@ export default function LandingPage() {
               <Feature text="Sem marca d'água" />
             </ul>
             
-            <button onClick={() => handleSubscribe('plan_iniciante')} style={secondaryBtnStyle}>Começar</button>
+            <button onClick={() => handleSubscribe('plan_iniciante')} style={secondaryBtnStyle}>Assinar</button>
           </div>
 
           {/* Professional */}
