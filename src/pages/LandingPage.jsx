@@ -73,6 +73,7 @@ export default function LandingPage() {
         
         {/* Left: Copy */}
         <div style={{ flex: '1 1 380px', minWidth: '280px' }}>
+          <img src="/download.svg" alt="Depo Fast" style={{ width: '48px', height: '48px', marginBottom: '16px', '--i': 0 }} />
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 92, 246, 0.08)', color: 'var(--accent-primary)', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: '500', marginBottom: '24px', border: '1px solid rgba(139, 92, 246, 0.15)', '--i': 0 }}>
             <Zap size={14} /> Aprovado por +10.000 marqueteiros
           </div>
