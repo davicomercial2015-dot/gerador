@@ -121,7 +121,7 @@ export default function LandingPage() {
       </section>
 
       {/* Features Showcase */}
-      <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)', backdropFilter: 'blur(1px)' }}>
+      <section ref={featuresRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', backdropFilter: 'blur(1px)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div className="grid-3-cols stagger-children">
             <div className="feature-card" style={{ '--i': 0 }}>
@@ -214,7 +214,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px', borderTop: '1px solid var(--border-color)' }}>
+      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 80px) 20px' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '40px' }}>
           <h2 style={{ fontSize: 'clamp(24px, 4vw, 32px)', fontWeight: '800', marginBottom: '8px', letterSpacing: '-0.02em' }}>
             Escale suas Provas Sociais
