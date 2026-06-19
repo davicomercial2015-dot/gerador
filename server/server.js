@@ -1,8 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { db } from './db.js';
+import { pb, getAdminClient } from './db.js';
 import dotenv from 'dotenv';
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
 
@@ -42,25 +41,26 @@ app.post('/api/register', async (req, res) => {
   }
 
   try {
-    const salt = await bcrypt.genSalt(10);
-    const password_hash = await bcrypt.hash(password, salt);
-
-    const rs = await db.execute({
-      sql: 'INSERT INTO users (email, password_hash) VALUES (?, ?)',
-      args: [email, password_hash]
+    const client = await getAdminClient();
+    
+    // Cadastrar usuário no PocketBase
+    const record = await client.collection('users').create({
+      email,
+      password,
+      passwordConfirm: password,
+      plan: 'free',
+      credits_remaining: 0,
+      emailVisibility: true
     });
 
-    // O Turso/LibSQL retorna o lastInsertRowid como um BigInt. Convertê-lo para Number.
-    const lastId = Number(rs.lastInsertRowid);
-
-    const token = jwt.sign({ id: lastId, email }, JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({ token, user: { id: lastId, email, plan: 'free', credits_remaining: 0 } });
+    const token = jwt.sign({ id: record.id, email: record.email }, JWT_SECRET, { expiresIn: '7d' });
+    res.status(201).json({ token, user: { id: record.id, email: record.email, plan: 'free', credits_remaining: 0 } });
     
   } catch (error) {
-    if (error.message && error.message.includes('UNIQUE constraint failed')) {
+    if (error.status === 400 || (error.message && error.message.includes('unique'))) {
       return res.status(409).json({ error: 'Email já cadastrado' });
     }
-    console.error(error);
+    console.error('Erro no cadastro do PocketBase:', error.message || error);
     res.status(500).json({ error: 'Erro ao registrar usuário' });
   }
 });
@@ -69,16 +69,11 @@ app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const rs = await db.execute({
-      sql: 'SELECT * FROM users WHERE email = ?',
-      args: [email]
-    });
-
-    const user = rs.rows[0];
-    if (!user) return res.status(401).json({ error: 'Email ou senha incorretos' });
-
-    const validPassword = await bcrypt.compare(password, user.password_hash);
-    if (!validPassword) return res.status(401).json({ error: 'Email ou senha incorretos' });
+    const client = await getAdminClient();
+    
+    // Autenticar com a senha do usuário
+    const authData = await client.collection('users').authWithPassword(email, password);
+    const user = authData.record;
 
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
     
@@ -87,34 +82,32 @@ app.post('/api/login', async (req, res) => {
       user: {
         id: user.id,
         email: user.email,
-        plan: user.plan,
-        credits_remaining: user.credits_remaining
+        plan: user.plan || 'free',
+        credits_remaining: user.credits_remaining || 0
       }
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erro no banco de dados' });
+    console.error('Erro no login do PocketBase:', error.message || error);
+    res.status(401).json({ error: 'Email ou senha incorretos' });
   }
 });
 
 // Consultar cota atual
 app.get('/api/quota', authenticateToken, async (req, res) => {
   try {
-    const rs = await db.execute({
-      sql: 'SELECT plan, credits_remaining FROM users WHERE id = ?',
-      args: [req.user.id]
-    });
-
-    const user = rs.rows[0];
-    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
+    const client = await getAdminClient();
+    const user = await client.collection('users').getOne(req.user.id);
     
+    const credits = user.credits_remaining || 0;
+    const plan = user.plan || 'free';
+
     res.json({
-      plan: user.plan,
-      credits_remaining: user.credits_remaining,
-      hasQuota: user.credits_remaining > 0 || user.plan !== 'free'
+      plan,
+      credits_remaining: credits,
+      hasQuota: credits > 0 || plan !== 'free'
     });
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao buscar cota no PocketBase:', error.message || error);
     res.status(500).json({ error: 'Erro ao consultar saldo' });
   }
 });
@@ -122,26 +115,25 @@ app.get('/api/quota', authenticateToken, async (req, res) => {
 // Consumir 1 crédito de cota
 app.post('/api/consume-quota', authenticateToken, async (req, res) => {
   try {
-    const rs = await db.execute({
-      sql: 'SELECT plan, credits_remaining FROM users WHERE id = ?',
-      args: [req.user.id]
-    });
+    const client = await getAdminClient();
+    const user = await client.collection('users').getOne(req.user.id);
+    
+    const credits = user.credits_remaining || 0;
+    const plan = user.plan || 'free';
 
-    const user = rs.rows[0];
-    if (!user) return res.status(404).json({ error: 'Usuário não encontrado' });
-
-    if (user.credits_remaining <= 0 && user.plan === 'free') {
+    if (credits <= 0 && plan === 'free') {
       return res.status(403).json({ error: 'Cota gratuita esgotada' });
     }
 
-    await db.execute({
-      sql: 'UPDATE users SET credits_remaining = credits_remaining - 1 WHERE id = ? AND credits_remaining > 0',
-      args: [req.user.id]
+    const newCredits = Math.max(0, credits - 1);
+
+    await client.collection('users').update(req.user.id, {
+      credits_remaining: newCredits
     });
 
-    res.json({ success: true, credits_remaining: user.credits_remaining - 1 });
+    res.json({ success: true, credits_remaining: newCredits });
   } catch (error) {
-    console.error(error);
+    console.error('Erro ao consumir cota no PocketBase:', error.message || error);
     res.status(500).json({ error: 'Erro ao debitar cota' });
   }
 });
@@ -174,7 +166,6 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
             unit_price: unit_price
           }
         ],
-        // O external_reference é crucial para sabermos de quem é o pagamento no Webhook
         external_reference: JSON.stringify({ userId: req.user.id, planId, credits }),
         back_urls: {
           success: 'https://depoofast.netlify.app/editor',
@@ -186,7 +177,7 @@ app.post('/api/create-checkout-session', authenticateToken, async (req, res) => 
     });
 
     res.json({ 
-      url: response.init_point, // Link oficial de pagamento do MP
+      url: response.init_point,
       message: "Redirecionando para o Mercado Pago..."
     });
   } catch (error) {
@@ -240,14 +231,12 @@ app.post('/api/create-pix-payment', authenticateToken, async (req, res) => {
 app.post('/api/webhooks/mercadopago', async (req, res) => {
   const { action, type, data } = req.body;
   
-  // Respondemos 200 imediatamente para o MP não ficar enviando repetidamente
   res.status(200).send('OK');
 
   const eventType = action || type;
 
   if (eventType === 'payment.created' || eventType === 'payment.updated' || eventType === 'payment') {
     try {
-      // Usar fetch para buscar os dados do pagamento direto da API do MP
       const paymentId = data.id;
       const paymentResponse = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
         headers: { 'Authorization': `Bearer ${process.env.MP_ACCESS_TOKEN}` }
@@ -256,23 +245,28 @@ app.post('/api/webhooks/mercadopago', async (req, res) => {
       const payment = await paymentResponse.json();
 
       if (payment.status === 'approved') {
-        // Extrai as informações que mandamos no external_reference
         const { userId, planId, credits } = JSON.parse(payment.external_reference);
         
-        // Atualiza a tabela do usuário
-        await db.execute({
-          sql: 'UPDATE users SET plan = ?, credits_remaining = credits_remaining + ? WHERE id = ?',
-          args: [planId, credits, userId]
+        const client = await getAdminClient();
+        
+        // Obter os créditos atuais do usuário
+        const user = await client.collection('users').getOne(userId);
+        const currentCredits = user.credits_remaining || 0;
+        
+        // Atualizar plano e créditos no PocketBase
+        await client.collection('users').update(userId, {
+          plan: planId,
+          credits_remaining: currentCredits + credits
         });
         
         console.log(`Sucesso: Créditos liberados para o usuário ${userId}`);
       }
     } catch (error) {
-      console.error('Erro ao processar Webhook MP:', error);
+      console.error('Erro ao processar Webhook MP no PocketBase:', error.message || error);
     }
   }
 });
 
 app.listen(port, () => {
-  console.log(`Backend rodando em http://localhost:${port} com Turso`);
+  console.log(`Backend rodando em http://localhost:${port} com PocketBase`);
 });
