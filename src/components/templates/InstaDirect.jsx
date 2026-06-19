@@ -1,5 +1,4 @@
-import React from 'react';
-import { ChevronLeft, ChevronRight, Phone, Video, Mic, Image as ImageIcon, Smile, Plus, Camera } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Phone, Video, Mic, Image as ImageIcon, Camera } from 'lucide-react';
 
 const VerifiedIcon = () => (
   <svg aria-label="Verificado" color="#0095f6" fill="#0095f6" height="12" role="img" viewBox="0 0 40 40" width="12">
@@ -39,12 +38,29 @@ const InstaDirect = ({ data }) => {
       }}>
         <ChevronLeft size={30} color="#fff" style={{ marginLeft: '-8px' }} />
         
-        <img 
-          src={data.avatar} 
-          alt="Profile" 
-          style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover' }} 
-          crossOrigin="anonymous"
-        />
+        {data.avatar ? (
+          <img 
+            src={data.avatar} 
+            alt="Profile" 
+            style={{ width: '36px', height: '36px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} 
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <div style={{ 
+            width: '36px', 
+            height: '36px', 
+            borderRadius: '50%', 
+            backgroundColor: '#262626', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: '#a8a8a8',
+            border: '1px solid #363636',
+            flexShrink: 0
+          }}>
+            <ImageIcon size={16} />
+          </div>
+        )}
         
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center', minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -67,15 +83,9 @@ const InstaDirect = ({ data }) => {
           }}>{data.igUsername ?? 'Online há 3 h'}</span>
         </div>
 
-        <div style={{ display: 'flex', gap: '20px', color: '#fff' }}>
-          {/* Group icon fake */}
-          <div style={{ position: 'relative', width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px' }}>
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line>
-            </svg>
-          </div>
-          <Phone size={24} />
-          <Video size={26} />
+        <div style={{ display: 'flex', gap: '16px', color: '#fff', alignItems: 'center' }}>
+          <Phone size={22} />
+          <Video size={24} />
         </div>
       </div>
 
@@ -103,12 +113,29 @@ const InstaDirect = ({ data }) => {
           {/* Middle Profile Section (Optional) */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '32px', marginTop: '16px' }}>
             <div style={{ position: 'relative' }}>
-              <img 
-                src={data.avatar} 
-                alt="Profile Big" 
-                style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', marginBottom: '12px' }} 
-                crossOrigin="anonymous"
-              />
+              {data.avatar ? (
+                <img 
+                  src={data.avatar} 
+                  alt="Profile Big" 
+                  style={{ width: '96px', height: '96px', borderRadius: '50%', objectFit: 'cover', marginBottom: '12px' }} 
+                  crossOrigin="anonymous"
+                />
+              ) : (
+                <div style={{ 
+                  width: '96px', 
+                  height: '96px', 
+                  borderRadius: '50%', 
+                  backgroundColor: '#262626', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center',
+                  color: '#a8a8a8',
+                  border: '1px solid #363636',
+                  marginBottom: '12px'
+                }}>
+                  <ImageIcon size={40} />
+                </div>
+              )}
             </div>
             <span style={{ fontSize: '20px', fontWeight: 'bold' }}>{data.name}</span>
             <div style={{ fontSize: '14px', color: '#a8a8a8', marginTop: '2px', marginBottom: '4px' }}>
@@ -136,7 +163,6 @@ const InstaDirect = ({ data }) => {
           {/* Messages */}
           {data.messages.map((msg, index) => {
             const isSameSenderAsNext = data.messages[index+1] && data.messages[index+1].type === msg.type;
-            const isSameSenderAsPrev = index > 0 && data.messages[index-1].type === msg.type;
             
             return (
               <div key={msg.id} style={{ 
@@ -146,25 +172,41 @@ const InstaDirect = ({ data }) => {
                 marginBottom: isSameSenderAsNext ? '2px' : '16px',
                 flexDirection: msg.type === 'in' ? 'row' : 'row-reverse'
               }}>
-                {msg.type === 'in' && (
-                  <div style={{ width: '28px', height: '28px' }}>
-                    {!isSameSenderAsNext && (
-                      <img 
-                        src={data.avatar} 
-                        alt="Profile" 
-                        style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover' }} 
-                        crossOrigin="anonymous"
-                      />
-                    )}
-                  </div>
+                {msg.type === 'in' && !isSameSenderAsNext && (
+                  data.avatar ? (
+                    <img
+                      src={data.avatar}
+                      alt="Profile"
+                      style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                      crossOrigin="anonymous"
+                    />
+                  ) : (
+                    <div style={{
+                      width: '28px',
+                      height: '28px',
+                      borderRadius: '50%',
+                      backgroundColor: '#262626',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#a8a8a8',
+                      border: '1px solid #363636',
+                      flexShrink: 0
+                    }}>
+                      <ImageIcon size={12} />
+                    </div>
+                  )
                 )}
-                <div style={{ 
-                  backgroundColor: msg.image && !msg.text ? 'transparent' : (msg.type === 'in' ? '#262626' : '#3797f0'), 
-                  padding: msg.image && !msg.text ? '0' : '12px 16px', 
-                  borderRadius: msg.type === 'in' ? '22px' : '22px', 
-                  maxWidth: '75%', 
+                {msg.type === 'in' && isSameSenderAsNext && (
+                  <div style={{ width: '28px', flexShrink: 0 }} />
+                )}
+                <div style={{
+                  backgroundColor: msg.image && !msg.text ? 'transparent' : (msg.type === 'in' ? '#262626' : '#3797f0'),
+                  padding: msg.image && !msg.text ? '0' : '12px 16px',
+                  borderRadius: msg.type === 'in' ? '22px' : '22px',
+                  maxWidth: '75%',
                   fontSize: '15px',
-                  lineHeight: '1.4',
+                  lineHeight: '1.35',
                   color: 'white',
                   wordBreak: 'break-word',
                   display: 'flex',
@@ -172,12 +214,25 @@ const InstaDirect = ({ data }) => {
                   overflow: 'hidden'
                 }}>
                   {msg.image && (
-                    <img src={msg.image} alt="Anexo" style={{ width: '100%', borderRadius: msg.text ? '18px 18px 4px 4px' : '22px', marginBottom: msg.text ? '8px' : '0', maxHeight: '250px', objectFit: 'cover' }} crossOrigin="anonymous" />
+                    <img src={msg.image} alt="Anexo" style={{ width: '100%', borderRadius: msg.text ? '18px 18px 4px 4px' : '22px', marginBottom: msg.text ? '8px' : '0', maxHeight: '250px', objectFit: 'cover', display: 'block' }} crossOrigin="anonymous" />
                   )}
                   {msg.text && (
                     <span style={{ padding: msg.image ? '0 4px 4px 4px' : '0' }}>{msg.text}</span>
                   )}
                 </div>
+                {!isSameSenderAsNext && msg.time && (
+                  <span style={{
+                    fontSize: '11px',
+                    color: '#a8a8a8',
+                    marginTop: '4px',
+                    marginLeft: msg.type === 'in' ? '36px' : '0',
+                    marginRight: msg.type === 'in' ? '0' : '0',
+                    alignSelf: msg.type === 'in' ? 'flex-start' : 'flex-end',
+                    letterSpacing: '0.01em'
+                  }}>
+                    {msg.time}
+                  </span>
+                )}
               </div>
             );
           })}
@@ -208,11 +263,9 @@ const InstaDirect = ({ data }) => {
         </div>
 
         {/* Right Icons */}
-        <div style={{ display: 'flex', gap: '16px', alignItems: 'center', color: '#fff' }}>
-          <Mic size={24} />
-          <ImageIcon size={24} />
-          <Smile size={24} />
-          <Plus size={24} />
+        <div style={{ display: 'flex', gap: '14px', alignItems: 'center', color: '#fff' }}>
+          <Mic size={22} />
+          <ImageIcon size={22} />
         </div>
       </div>
     </div>

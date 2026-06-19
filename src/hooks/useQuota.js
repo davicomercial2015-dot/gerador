@@ -1,18 +1,13 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_URL } from '../config';
 
 export function useQuota() {
-  const [generations, setGenerations] = useState(0);
   const [remaining, setRemaining] = useState(0);
   const [hasQuota, setHasQuota] = useState(false);
   const [plan, setPlan] = useState('free');
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchQuota();
-  }, []);
 
   const fetchQuota = async () => {
     const token = localStorage.getItem('depofast_token');
@@ -27,7 +22,7 @@ export function useQuota() {
       const response = await fetch(`${API_URL}/api/quota`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
-      
+
       if (!response.ok) {
         if (response.status === 401 || response.status === 403) {
           localStorage.removeItem('depofast_token');
@@ -46,6 +41,11 @@ export function useQuota() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Defer to next tick so setState inside fetchQuota doesn't run synchronously in the effect
+    Promise.resolve().then(fetchQuota);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const incrementQuota = async () => {
     const token = localStorage.getItem('depofast_token');

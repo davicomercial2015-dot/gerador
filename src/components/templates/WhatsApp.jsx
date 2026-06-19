@@ -1,29 +1,28 @@
-import React from 'react';
-import { ChevronLeft, Plus, Camera, Mic, Sticker, Video, Phone, Send } from 'lucide-react';
+import { ChevronLeft, Plus, Sticker, Video, Phone, Send, Image as ImageIcon } from 'lucide-react';
 
 const themeStyles = {
   light: {
-    containerBg: '#efeae2',
+    containerBg: '#efeef4',
     bgImage: 'url("https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png")',
-    bgFilter: 'opacity(0.4)',
+    bgFilter: 'opacity(0.08)',
     headerBg: '#f6f6f6',
     headerBorder: '#d1d1d6',
     textMain: '#000',
     textSecondary: '#8e8e93',
     bubbleIn: '#ffffff',
-    bubbleOut: '#e7ffdb',
+    bubbleOut: '#DCF7C5',
     bubbleText: '#000',
-    bubbleTime: '#8e8e93',
-    bubbleTimeOut: '#8e8e93',
-    dateBadgeBg: '#ffffff',
-    dateBadgeText: '#54656f',
+    bubbleTime: 'rgba(0, 0, 0, 0.4)',
+    bubbleTimeOut: 'rgba(0, 0, 0, 0.4)',
+    dateBadgeBg: 'rgba(142, 142, 147, 0.18)',
+    dateBadgeText: '#8e8e93',
     inputBg: '#ffffff',
     inputBorder: '#d1d1d6',
     statusBarText: '#000',
     iconColor: '#007aff',
     micBg: '#00a884',
     batteryBg: '#000',
-    batteryOutline: '#000'
+    batteryOutline: 'rgba(0,0,0,0.35)'
   },
   dark: {
     containerBg: '#0b141a',
@@ -86,12 +85,29 @@ const WhatsApp = ({ data }) => {
           <span style={{ fontSize: '17px', marginLeft: '-6px' }}>{data.waUnreadCount ?? '12'}</span>
         </div>
         
-        <img 
-          src={data.avatar} 
-          alt="Profile" 
-          style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} 
-          crossOrigin="anonymous"
-        />
+        {data.avatar ? (
+          <img 
+            src={data.avatar} 
+            alt="Profile" 
+            style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} 
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <div style={{ 
+            width: '40px', 
+            height: '40px', 
+            borderRadius: '50%', 
+            backgroundColor: data.waTheme === 'light' ? '#e5e5ea' : '#2c2c2e', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: theme.textSecondary,
+            border: `1px solid ${theme.headerBorder}`,
+            flexShrink: 0
+          }}>
+            <ImageIcon size={18} />
+          </div>
+        )}
         
         <div style={{ display: 'flex', flexDirection: 'column', flex: 1, marginLeft: '4px', minWidth: 0 }}>
           <span style={{ 
@@ -158,13 +174,15 @@ const WhatsApp = ({ data }) => {
 
           {data.messages.map((msg, index) => {
             const isSameSender = index > 0 && data.messages[index-1].type === msg.type;
-            
+            const hasImage = !!msg.image;
+            const hasText = !!msg.text && msg.text.trim().length > 0;
+
             return (
-              <div key={msg.id} style={{ 
-                backgroundColor: msg.type === 'in' ? theme.bubbleIn : theme.bubbleOut, 
-                padding: msg.image && !msg.text ? '4px' : '6px 8px 8px 12px', 
-                borderRadius: msg.type === 'in' ? (isSameSender ? '8px' : '0 8px 8px 8px') : (isSameSender ? '8px' : '8px 0 8px 8px'), 
-                maxWidth: '85%', 
+              <div key={msg.id} style={{
+                backgroundColor: msg.type === 'in' ? theme.bubbleIn : theme.bubbleOut,
+                padding: hasImage && !hasText ? '5px' : '7px 10px 8px 12px',
+                borderRadius: msg.type === 'in' ? (isSameSender ? '8px' : '0 8px 8px 8px') : (isSameSender ? '8px' : '8px 0 8px 8px'),
+                maxWidth: '85%',
                 alignSelf: msg.type === 'in' ? 'flex-start' : 'flex-end',
                 position: 'relative',
                 marginBottom: '8px',
@@ -187,31 +205,31 @@ const WhatsApp = ({ data }) => {
 
                 {msg.image && (
                   <div style={{ position: 'relative' }}>
-                    <img src={msg.image} alt="Anexo" style={{ width: '100%', borderRadius: '6px', marginBottom: msg.text ? '4px' : '0', maxHeight: '250px', objectFit: 'cover' }} crossOrigin="anonymous" />
-                    {!msg.text && (
-                      <div style={{ position: 'absolute', bottom: '4px', right: '4px', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'rgba(0,0,0,0.4)', padding: '2px 6px', borderRadius: '10px' }}>
-                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.8)' }}>{msg.time}</span>
+                    <img src={msg.image} alt="Anexo" style={{ width: '100%', borderRadius: '6px', marginBottom: msg.text ? '4px' : '0', maxHeight: '250px', objectFit: 'cover', display: 'block' }} crossOrigin="anonymous" />
+                    {!hasText && (
+                      <div style={{ position: 'absolute', bottom: '6px', right: '6px', display: 'flex', alignItems: 'center', gap: '4px', backgroundColor: 'rgba(0,0,0,0.45)', padding: '3px 7px', borderRadius: '10px' }}>
+                        <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.9)' }}>{msg.time}</span>
                         {msg.type === 'out' && (
-                          <svg viewBox="0 0 16 15" width="16" height="15" fill="#53bdeb"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.32.32 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/></svg>
+                          <svg viewBox="0 0 16 15" width="16" height="15" fill="#3497F9"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.32.32 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/></svg>
                         )}
                       </div>
                     )}
                   </div>
                 )}
-                
-                {msg.text && (
+
+                {hasText && (
                   <div style={{ display: 'flex', gap: '8px', alignItems: 'flex-end', flexWrap: 'wrap' }}>
-                    <div style={{ fontSize: '15px', lineHeight: '1.4', wordBreak: 'break-word', flex: 1, paddingRight: '12px' }}>
+                    <div style={{ fontSize: '15px', lineHeight: '1.35', wordBreak: 'break-word', flex: 1, paddingRight: '12px' }}>
                       {msg.text.includes('http') ? (
-                        <span style={{ color: '#53bdeb', textDecoration: 'underline' }}>{msg.text}</span>
+                        <span style={{ color: data.waTheme === 'light' ? '#007aff' : '#53bdeb', textDecoration: 'underline' }}>{msg.text}</span>
                       ) : (
                         msg.text
                       )}
                     </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '4px', marginTop: '-10px', float: 'right' }}>
+                    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '4px', marginTop: '-2px', flexShrink: 0 }}>
                       <span style={{ fontSize: '11px', color: msg.type === 'in' ? theme.bubbleTime : theme.bubbleTimeOut }}>{msg.time}</span>
                       {msg.type === 'out' && (
-                        <svg viewBox="0 0 16 15" width="16" height="15" fill="#53bdeb"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.32.32 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/></svg>
+                        <svg viewBox="0 0 16 15" width="16" height="15" fill="#3497F9"><path d="M15.01 3.316l-.478-.372a.365.365 0 0 0-.51.063L8.666 9.879a.32.32 0 0 1-.484.033l-.358-.325a.32.32 0 0 0-.484.032l-.378.483a.418.418 0 0 0 .036.541l1.32 1.266c.143.14.361.125.484-.033l6.272-8.048a.366.366 0 0 0-.064-.512zm-4.1 0l-.478-.372a.365.365 0 0 0-.51.063L4.566 9.879a.32.32 0 0 1-.484.033L1.891 7.769a.366.366 0 0 0-.515.006l-.423.433a.364.364 0 0 0 .006.514l3.258 3.185c.143.14.361.125.484-.033l6.272-8.048a.365.365 0 0 0-.063-.51z"/></svg>
                       )}
                     </div>
                   </div>

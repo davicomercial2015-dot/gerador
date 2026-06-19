@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Lock, CheckCircle2, CreditCard, Copy, Check } from 'lucide-react';
 import { API_URL } from '../config';
@@ -43,7 +43,9 @@ export default function Checkout() {
               navigate('/editor');
             }
           }
-        } catch (err) {}
+        } catch {
+          // Silent: poll will retry
+        }
       }, 3000);
     }
     return () => clearInterval(interval);
@@ -112,30 +114,30 @@ export default function Checkout() {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '40px 20px' }}>
       
       <div style={{ width: '100%', maxWidth: '900px', marginBottom: '24px' }}>
-        <button onClick={() => navigate('/')} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
-          <ArrowLeft size={20} /> Voltar para o Início
+        <button onClick={() => navigate('/')} className="back-link">
+          <ArrowLeft size={18} /> Voltar para o Início
         </button>
       </div>
 
       <div className="grid-2-cols" style={{ width: '100%', maxWidth: '900px' }}>
-        
+
         {/* Resumo do Pedido (Esquerda) */}
         <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '12px', border: '1px solid var(--border-color)', height: 'fit-content' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
             <img src="/download.svg" alt="Depo Fast" style={{ width: '32px', height: '32px' }} />
-            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: 'bold', margin: 0 }}>Depo Fast</h2>
-          </div>
-          
-          <h3 style={{ color: 'var(--text-secondary)', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Resumo da Compra</h3>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '24px', borderBottom: '1px solid var(--border-color)', marginBottom: '24px' }}>
-            <div>
-              <div style={{ color: 'var(--text-primary)', fontSize: '20px', fontWeight: 'bold' }}>Plano {selectedPlan.name}</div>
-              <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '4px' }}>{selectedPlan.credits} gerações/mês</div>
-            </div>
-            <div style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '800' }}>{selectedPlan.price}</div>
+            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '700', margin: 0, letterSpacing: '-0.01em' }}>Depo Fast</h2>
           </div>
 
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <h3 style={{ color: 'var(--text-secondary)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '12px', fontWeight: '600' }}>Resumo da Compra</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '24px', borderBottom: '1px solid var(--border-color)', marginBottom: '24px' }}>
+            <div>
+              <div style={{ color: 'var(--text-primary)', fontSize: '20px', fontWeight: '700', letterSpacing: '-0.01em' }}>Plano {selectedPlan.name}</div>
+              <div style={{ color: 'var(--text-muted)', fontSize: '14px', marginTop: '4px' }}>{selectedPlan.credits} gerações por mês</div>
+            </div>
+            <div style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '800', letterSpacing: '-0.02em' }}>{selectedPlan.price}</div>
+          </div>
+
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <li style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'var(--text-secondary)', fontSize: '15px' }}>
               <CheckCircle2 size={18} color="#22c55e" /> Liberação imediata após o pagamento
             </li>
@@ -151,86 +153,113 @@ export default function Checkout() {
         {/* Formulário de Cadastro e Pagamento (Direita) */}
         <div style={{ backgroundColor: 'var(--bg-secondary)', padding: '40px', borderRadius: '12px', border: '1px solid var(--border-color)', boxShadow: 'var(--shadow-lg)' }}>
           <div style={{ textAlign: 'center', marginBottom: '32px' }}>
-            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: 'bold', marginBottom: '8px' }}>Finalizar Compra</h2>
-            <p style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>Crie seu acesso abaixo para prosseguir para o pagamento seguro no Mercado Pago.</p>
+            <h2 style={{ color: 'var(--text-primary)', fontSize: '24px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>Finalizar Compra</h2>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: 1.5 }}>Crie seu acesso abaixo para prosseguir para o pagamento seguro no Mercado Pago.</p>
           </div>
 
-          {error && <div role="alert" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', textAlign: 'center' }}>{error}</div>}
+          {error && (
+            <div role="alert" className="alert alert-error">
+              {error}
+            </div>
+          )}
 
           {pixData ? (
             <div style={{ textAlign: 'center' }}>
-              <div style={{ backgroundColor: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', padding: '12px', borderRadius: '8px', marginBottom: '24px', fontSize: '14px', fontWeight: 'bold' }}>
+              <div className="alert alert-success">
                 ✓ Conta criada! Pague o Pix abaixo para liberar.
               </div>
-              <img 
-                src={`data:image/jpeg;base64,${pixData.qr_code_base64}`} 
-                alt="QR Code Pix" 
-                style={{ width: '200px', height: '200px', borderRadius: '16px', margin: '0 auto 24px auto', display: 'block', border: '4px solid #fff' }} 
-              />
-              <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '16px' }}>Ou copie o código (Pix Copia e Cola):</p>
-              
-              <div style={{ display: 'flex', gap: '8px' }}>
-                <input 
-                  type="text" 
-                  readOnly 
-                  value={pixData.qr_code} 
-                  style={{ flex: 1, padding: '12px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', color: 'var(--text-muted)', fontSize: '12px' }}
+              <div style={{ backgroundColor: 'white', padding: '16px', borderRadius: '16px', display: 'inline-block', margin: '0 auto 16px auto' }}>
+                <img
+                  src={`data:image/jpeg;base64,${pixData.qr_code_base64}`}
+                  alt="QR Code Pix"
+                  style={{ width: '200px', height: '200px', display: 'block', borderRadius: '8px' }}
                 />
-                <button onClick={copyPix} style={{ display: 'flex', alignItems: 'center', gap: '8px', backgroundColor: copied ? '#22c55e' : 'var(--accent-primary)', color: 'var(--text-primary)', border: 'none', padding: '0 16px', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer', transition: 'background 0.2s' }}>
-                  {copied ? <Check size={18} /> : <Copy size={18} />} {copied ? 'Copiado!' : 'Copiar'}
+              </div>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '16px' }}>Ou copie o código (Pix Copia e Cola):</p>
+
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <input
+                  type="text"
+                  readOnly
+                  value={pixData.qr_code}
+                  onClick={e => e.target.select()}
+                  className="form-control"
+                  style={{ flex: 1, fontSize: '12px', fontFamily: 'monospace' }}
+                />
+                <button
+                  onClick={copyPix}
+                  className="btn"
+                  style={{
+                    backgroundColor: copied ? '#22c55e' : 'var(--accent-primary)',
+                    color: 'white',
+                    border: 'none',
+                    padding: '0 16px',
+                    fontWeight: '600',
+                    transition: 'background-color 0.2s var(--ease-out-quart)'
+                  }}
+                >
+                  {copied ? <><Check size={16} /> Copiado!</> : <><Copy size={16} /> Copiar</>}
                 </button>
               </div>
-              
-              <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}>
-                <div style={{ width: '16px', height: '16px', border: '2px solid var(--accent-primary)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
-                Aguardando confirmação do pagamento...
+
+              <div style={{ marginTop: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', color: 'var(--text-secondary)', fontSize: '14px' }}>
+                <span className="btn-spinner" style={{ borderColor: 'var(--accent-primary)', borderTopColor: 'transparent' }} />
+                Aguardando confirmação do pagamento…
               </div>
-              <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </div>
           ) : (
-            <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <form onSubmit={handleCheckout} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
               {!isLoggedIn && (
                 <>
-                  <div>
-                    <label htmlFor="checkout-email" style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>E-mail de Acesso</label>
-                    <input 
-                      type="email" 
+                  <div className="form-group">
+                    <label htmlFor="checkout-email">E-mail de Acesso</label>
+                    <input
+                      type="email"
                       id="checkout-email"
+                      className="form-control"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
                       required
+                      autoComplete="email"
                       placeholder="Para onde enviaremos seu acesso?"
-                      style={{ width: '100%', padding: '14px 16px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '12px', color: 'var(--text-primary)', fontSize: '16px' }}
+                      style={{ padding: '12px 14px', fontSize: '15px' }}
                     />
                   </div>
-                  <div>
-                    <label htmlFor="checkout-password" style={{ display: 'block', color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '8px' }}>Criar Senha</label>
-                    <input 
-                      type="password" 
+                  <div className="form-group">
+                    <label htmlFor="checkout-password">Criar Senha</label>
+                    <input
+                      type="password"
                       id="checkout-password"
+                      className="form-control"
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       required
                       minLength={6}
+                      autoComplete="new-password"
                       placeholder="Mínimo 6 caracteres"
-                      style={{ width: '100%', padding: '14px 16px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '12px', color: 'var(--text-primary)', fontSize: '16px' }}
+                      style={{ padding: '12px 14px', fontSize: '15px' }}
                     />
                   </div>
                 </>
               )}
-              
+
               {isLoggedIn && (
-                <div style={{ backgroundColor: 'rgba(139, 92, 246, 0.1)', color: 'var(--accent-primary)', padding: '16px', borderRadius: '12px', fontSize: '15px', textAlign: 'center', marginBottom: '8px' }}>
+                <div className="alert alert-info">
                   Você já está logado! Clique abaixo para gerar o Pix e assinar o <b>Plano {selectedPlan.name}</b>.
                 </div>
               )}
-              
-              <button type="submit" disabled={loading} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%)', color: 'var(--text-primary)', border: 'none', padding: '18px', borderRadius: '12px', fontSize: '18px', fontWeight: 'bold', cursor: loading ? 'not-allowed' : 'pointer', marginTop: '16px', transition: 'transform 0.2s', boxShadow: 'var(--shadow-accent)', opacity: loading ? 0.7 : 1 }} onMouseOver={e => !loading && (e.currentTarget.style.transform = 'scale(1.02)')} onMouseOut={e => !loading && (e.currentTarget.style.transform = 'scale(1)')}>
-                <CreditCard size={24} /> {loading ? 'Gerando Pix...' : 'Gerar Pix'}
+
+              <button
+                type="submit"
+                className="btn btn-primary"
+                disabled={loading}
+                style={{ padding: '16px', fontSize: '16px', marginTop: '8px', width: '100%' }}
+              >
+                {loading ? <><span className="btn-spinner" /> Gerando Pix…</> : <><CreditCard size={20} /> Gerar Pix</>}
               </button>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', color: 'var(--text-muted)', fontSize: '12px', marginTop: '8px' }}>
-                <Lock size={14} /> Pagamento 100% seguro via Mercado Pago
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '12px', marginTop: '4px' }}>
+                <Lock size={13} /> Pagamento 100% seguro via Mercado Pago
               </div>
             </form>
           )}

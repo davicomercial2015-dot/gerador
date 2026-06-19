@@ -1,5 +1,4 @@
-import React from 'react';
-import { Heart, MessageCircle, Send, Bookmark, MoreHorizontal } from 'lucide-react';
+import { Heart, Image as ImageIcon } from 'lucide-react';
 
 const InstaComment = ({ data }) => {
   return (
@@ -21,12 +20,29 @@ const InstaComment = ({ data }) => {
 
       {/* Post Owner (fake) */}
       <div style={{ padding: '16px', display: 'flex', gap: '12px', borderBottom: '1px solid #262626' }}>
-        <img 
-          src={data.postOwnerAvatar} 
-          alt="Post Owner" 
-          style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} 
-          crossOrigin="anonymous"
-        />
+        {data.postOwnerAvatar ? (
+          <img 
+            src={data.postOwnerAvatar} 
+            alt="Post Owner" 
+            style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} 
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <div style={{ 
+            width: '32px', 
+            height: '32px', 
+            borderRadius: '50%', 
+            backgroundColor: '#262626', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: '#a8a8a8',
+            border: '1px solid #363636',
+            flexShrink: 0
+          }}>
+            <ImageIcon size={14} />
+          </div>
+        )}
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', gap: '6px' }}>
             <span style={{ fontWeight: '600', fontSize: '14px' }}>{data.postOwnerName}</span>
@@ -38,13 +54,30 @@ const InstaComment = ({ data }) => {
 
       {/* Comments Area */}
       <div style={{ padding: '16px', display: 'flex', gap: '12px', flex: 1 }}>
-        <img 
-          src={data.avatar} 
-          alt="Profile" 
-          style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} 
-          crossOrigin="anonymous"
-        />
-        <div style={{ flex: 1 }}>
+        {data.avatar ? (
+          <img
+            src={data.avatar}
+            alt="Profile"
+            style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <div style={{
+            width: '32px',
+            height: '32px',
+            borderRadius: '50%',
+            backgroundColor: '#262626',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#a8a8a8',
+            border: '1px solid #363636',
+            flexShrink: 0
+          }}>
+            <ImageIcon size={14} />
+          </div>
+        )}
+        <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
             <span style={{ fontWeight: '600', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '4px' }}>
               {data.name}
@@ -57,28 +90,54 @@ const InstaComment = ({ data }) => {
             </span>
             <span style={{ fontSize: '12px', color: '#A8A8A8' }}>2 m</span>
           </div>
-          <div style={{ fontSize: '14px', marginTop: '4px', wordBreak: 'break-word', lineHeight: '1.4' }}>
-            {data.messages[0]?.text || ''}
+          <div style={{
+            fontSize: '14px',
+            marginTop: '4px',
+            wordBreak: 'break-word',
+            lineHeight: '1.4',
+            color: (data.messages[0]?.text || '').trim() ? 'white' : '#6b6b6b',
+            fontStyle: (data.messages[0]?.text || '').trim() ? 'normal' : 'italic'
+          }}>
+            {(data.messages[0]?.text || '').trim() || 'Adicione um comentário no painel ao lado…'}
           </div>
-          <div style={{ display: 'flex', gap: '16px', marginTop: '8px', color: '#A8A8A8', fontSize: '12px', fontWeight: '500' }}>
-            <span>Responder</span>
-            <span>Enviar</span>
-            <span>{data.likes} curtidas</span>
-          </div>
+          {(data.messages[0]?.text || '').trim() && (
+            <div style={{ display: 'flex', gap: '16px', marginTop: '8px', color: '#A8A8A8', fontSize: '12px', fontWeight: '500' }}>
+              <span>Responder</span>
+              <span>Enviar</span>
+              <span>{data.likes} curtidas</span>
+            </div>
+          )}
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-          <Heart size={14} color="#A8A8A8" />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+          <Heart size={14} color={(data.messages[0]?.text || '').trim() ? '#ed4956' : '#A8A8A8'} fill={(data.messages[0]?.text || '').trim() ? '#ed4956' : 'none'} />
         </div>
       </div>
 
       {/* Input Fake */}
       <div style={{ padding: '16px', display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid #262626' }}>
-        <img 
-          src={data.postOwnerAvatar} 
-          alt="Post Owner Input" 
-          style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} 
-          crossOrigin="anonymous"
-        />
+        {data.postOwnerAvatar ? (
+          <img 
+            src={data.postOwnerAvatar} 
+            alt="Post Owner Input" 
+            style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover' }} 
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <div style={{ 
+            width: '32px', 
+            height: '32px', 
+            borderRadius: '50%', 
+            backgroundColor: '#262626', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            color: '#a8a8a8',
+            border: '1px solid #363636',
+            flexShrink: 0
+          }}>
+            <ImageIcon size={14} />
+          </div>
+        )}
         <span style={{ color: '#A8A8A8', fontSize: '14px', flex: 1 }}>Adicione um comentário...</span>
         <span style={{ color: '#0095f6', fontSize: '14px', fontWeight: '600', opacity: 0.5 }}>Publicar</span>
       </div>

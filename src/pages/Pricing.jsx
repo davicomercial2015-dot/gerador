@@ -1,4 +1,3 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Check, Zap, ArrowLeft } from 'lucide-react';
 import { API_URL } from '../config';

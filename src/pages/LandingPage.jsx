@@ -1,7 +1,6 @@
-import React, { useRef } from 'react';
+import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
-import { API_URL } from '../config';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -37,15 +36,24 @@ export default function LandingPage() {
       
       {/* Header */}
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 6%', borderBottom: '1px solid var(--border-color)' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700' }}>
+        <div
+          onClick={() => navigate('/')}
+          style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.01em' }}>
           <img src="/download.svg" alt="Logo" style={{ width: '28px', height: '28px' }} />
           Depo Fast
         </div>
-        <nav style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          <button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} style={{ background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', fontWeight: '500', fontSize: '14px', letterSpacing: '0.01em' }}>
+        <nav style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button
+            onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })}
+            className="nav-link"
+          >
             Planos
           </button>
-          <button onClick={handleStart} className="btn" style={{ background: 'var(--bg-tertiary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '8px 20px', borderRadius: '8px', fontWeight: '500', fontSize: '14px', cursor: 'pointer' }}>
+          <button
+            onClick={handleStart}
+            className="btn"
+            style={{ padding: '8px 20px', fontWeight: '500', fontSize: '14px' }}
+          >
             Entrar
           </button>
         </nav>
@@ -84,28 +92,28 @@ export default function LandingPage() {
           </div>
 
           <div className="grid-3-cols">
-            <div style={{ backgroundColor: 'var(--bg-primary)', padding: '28px 24px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+            <div className="feature-card">
               <div style={{ backgroundColor: '#22c55e', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <MessageCircle size={20} color="#fff" />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px' }}>WhatsApp Perfeito</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px' }}>Simule conversas inteiras com suporte a envio de imagens, fotos de perfil dinâmicas e papel de parede nativo.</p>
+              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>WhatsApp Perfeito</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Simule conversas inteiras com suporte a envio de imagens, fotos de perfil dinâmicas e papel de parede nativo.</p>
             </div>
 
-            <div style={{ backgroundColor: 'var(--bg-primary)', padding: '28px 24px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+            <div className="feature-card">
               <div style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <Camera size={20} color="#fff" />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px' }}>Instagram Direct</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px' }}>Interface idêntica do IG Direct. Altere seguidores, publicações e simule engajamento de influenciadores.</p>
+              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>Instagram Direct</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Interface idêntica do IG Direct. Altere seguidores, publicações e simule engajamento de influenciadores.</p>
             </div>
 
-            <div style={{ backgroundColor: 'var(--bg-primary)', padding: '28px 24px', borderRadius: '10px', border: '1px solid var(--border-color)' }}>
+            <div className="feature-card">
               <div style={{ backgroundColor: 'var(--accent-primary)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <MessageSquare size={20} color="#fff" />
               </div>
-              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px' }}>Comentários Múltiplos</h3>
-              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px' }}>Crie fluxos de comentários aninhados que imitam o comportamento viral do Instagram.</p>
+              <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '8px', letterSpacing: '-0.01em' }}>Comentários Múltiplos</h3>
+              <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Crie fluxos de comentários aninhados que imitam o comportamento viral do Instagram.</p>
             </div>
           </div>
         </div>
@@ -118,17 +126,19 @@ export default function LandingPage() {
           <p style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '48px', maxWidth: '500px', margin: '0 auto 48px auto' }}>Veja o nível de detalhe dos mockups. Você controla tudo.</p>
           
           <div style={{ position: 'relative', maxWidth: '360px', margin: '0 auto' }}>
-            <button 
+            <button
               onClick={handlePrev}
-              aria-label="Anterior"
-              style={{ position: 'absolute', left: '-48px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '10px', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              aria-label="Demonstração anterior"
+              className="carousel-arrow carousel-arrow-left"
+            >
               <ChevronLeft size={20} />
             </button>
 
-            <button 
+            <button
               onClick={handleNext}
-              aria-label="Próximo"
-              style={{ position: 'absolute', right: '-48px', top: '50%', transform: 'translateY(-50%)', zIndex: 10, backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', padding: '10px', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              aria-label="Próxima demonstração"
+              className="carousel-arrow carousel-arrow-right"
+            >
               <ChevronRight size={20} />
             </button>
 

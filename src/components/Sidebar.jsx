@@ -1,8 +1,7 @@
-import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Camera, MessageSquare, Upload, Plus, Trash2, Image as ImageIcon, Home, CreditCard, LogOut } from 'lucide-react';
 
-const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
+const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota }) => {
   const navigate = useNavigate();
 
   return (
@@ -11,20 +10,50 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => navigate('/')}>
           <img src="/download.svg" alt="Logo" style={{ width: '24px', height: '24px' }} />
-          <span style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)' }}>Depo Fast</span>
+          <span style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>Depo Fast</span>
         </div>
-        <div style={{ display: 'flex', gap: '4px' }}>
-          <button onClick={() => navigate('/')} aria-label="Início" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px', borderRadius: '6px', display: 'flex', alignItems: 'center' }} title="Início">
+        <div style={{ display: 'flex', gap: '2px' }}>
+          <button
+            onClick={() => navigate('/')}
+            aria-label="Início"
+            className="sidebar-icon-btn"
+            title="Início"
+          >
             <Home size={16} />
           </button>
-          <button onClick={() => navigate('/pricing')} aria-label="Planos" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px', borderRadius: '6px', display: 'flex', alignItems: 'center' }} title="Planos">
+          <button
+            onClick={() => navigate('/pricing')}
+            aria-label="Planos"
+            className="sidebar-icon-btn"
+            title="Planos"
+          >
             <CreditCard size={16} />
           </button>
-          <button onClick={() => { localStorage.removeItem('depofast_token'); navigate('/login'); }} aria-label="Sair" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px', borderRadius: '6px', display: 'flex', alignItems: 'center' }} title="Sair">
+          <button
+            onClick={() => { localStorage.removeItem('depofast_token'); navigate('/login'); }}
+            aria-label="Sair"
+            className="sidebar-icon-btn"
+            title="Sair"
+          >
             <LogOut size={16} />
           </button>
         </div>
       </div>
+
+      {/* Indicador de Cotas na Sidebar */}
+      {hasQuota !== undefined && (
+        <div style={{ marginBottom: '16px', padding: '10px 12px', borderRadius: '8px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', fontSize: '12px' }}>
+          {hasQuota ? (
+            <span style={{ color: 'var(--text-secondary)' }}>
+              Você ainda tem <strong style={{ color: 'var(--text-primary)' }}>{remaining}</strong> {remaining === 1 ? 'geração grátis' : 'gerações grátis'}
+            </span>
+          ) : (
+            <span style={{ color: '#ef4444', fontWeight: '600' }}>
+              Limite gratuito atingido. Assine um plano.
+            </span>
+          )}
+        </div>
+      )}
 
       <div className="tabs" role="tablist">
         <div 
@@ -94,30 +123,54 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
       <div className="form-group">
         <label htmlFor="user-avatar">Foto de Perfil (URL ou Upload)</label>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <input 
-            type="text" 
+          <input
+            type="text"
             id="user-avatar"
-            className="form-control" 
-            value={data.avatar} 
-            onChange={(e) => onChange('avatar', e.target.value)} 
+            className="form-control"
+            value={data.avatar}
+            onChange={(e) => onChange('avatar', e.target.value)}
             placeholder="https://..."
             style={{ flex: 1, height: '44px' }}
           />
-          <label className="btn" style={{ width: '44px', height: '44px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto" aria-label="Upload da foto de perfil">
+          {data.avatar && (
+            <button
+              type="button"
+              onClick={() => onChange('avatar', '')}
+              aria-label="Remover foto de perfil"
+              title="Remover foto"
+              className="sidebar-icon-btn"
+              style={{ width: '44px', height: '44px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)' }}
+            >
+              <Trash2 size={16} />
+            </button>
+          )}
+          <label
+            className="btn"
+            style={{ width: '44px', height: '44px', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+            title="Fazer Upload da Foto"
+            aria-label="Upload da foto de perfil"
+          >
             <Upload size={16} color="var(--text-secondary)" />
-            <input 
-              type="file" 
-              accept="image/*" 
+            <input
+              type="file"
+              accept="image/*"
               style={{ display: 'none' }}
               onChange={(e) => {
                 const file = e.target.files[0];
-                if (file) {
-                  const reader = new FileReader();
-                  reader.onload = (event) => {
-                    onChange('avatar', event.target.result);
-                  };
-                  reader.readAsDataURL(file);
+                if (!file) return;
+                // Validate file size (max 5MB) and type
+                if (!file.type.startsWith('image/')) return;
+                if (file.size > 5 * 1024 * 1024) {
+                  alert('Imagem muito grande. Limite: 5MB.');
+                  e.target.value = '';
+                  return;
                 }
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                  onChange('avatar', event.target.result);
+                };
+                reader.readAsDataURL(file);
+                e.target.value = '';
               }}
             />
           </label>
@@ -227,23 +280,34 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
                   style={{ flex: 1, height: '36px' }}
                 />
 
-                <label className="btn" style={{ width: '36px', height: '36px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Anexar Imagem ao Balão" aria-label={`Anexar imagem à mensagem ${index + 1}`}>
+                <label
+                  className="btn"
+                  style={{ width: '36px', height: '36px', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+                  title="Anexar Imagem ao Balão"
+                  aria-label={`Anexar imagem à mensagem ${index + 1}`}
+                >
                   <ImageIcon size={15} color="var(--text-secondary)" />
-                  <input 
-                    type="file" 
-                    accept="image/*" 
+                  <input
+                    type="file"
+                    accept="image/*"
                     style={{ display: 'none' }}
                     onChange={(e) => {
                       const file = e.target.files[0];
-                      if (file) {
-                        const reader = new FileReader();
-                        reader.onload = (event) => {
-                          const newMsgs = [...data.messages];
-                          newMsgs[index].image = event.target.result;
-                          onChange('messages', newMsgs);
-                        };
-                        reader.readAsDataURL(file);
+                      if (!file) return;
+                      if (!file.type.startsWith('image/')) return;
+                      if (file.size > 5 * 1024 * 1024) {
+                        alert('Imagem muito grande. Limite: 5MB.');
+                        e.target.value = '';
+                        return;
                       }
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        const newMsgs = [...data.messages];
+                        newMsgs[index].image = event.target.result;
+                        onChange('messages', newMsgs);
+                      };
+                      reader.readAsDataURL(file);
+                      e.target.value = '';
                     }}
                   />
                 </label>
@@ -404,27 +468,50 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           <div className="form-group">
             <label htmlFor="post-owner-avatar">Foto do Seu Perfil (URL ou Upload)</label>
             <div style={{ display: 'flex', gap: '8px' }}>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 id="post-owner-avatar"
-                className="form-control" 
-                value={data.postOwnerAvatar} 
-                onChange={(e) => onChange('postOwnerAvatar', e.target.value)} 
+                className="form-control"
+                value={data.postOwnerAvatar}
+                onChange={(e) => onChange('postOwnerAvatar', e.target.value)}
                 style={{ flex: 1 }}
               />
-              <label className="btn" style={{ width: '44px', height: '44px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto do Post" aria-label="Upload da foto do perfil">
+              {data.postOwnerAvatar && (
+                <button
+                  type="button"
+                  onClick={() => onChange('postOwnerAvatar', '')}
+                  aria-label="Remover foto do perfil"
+                  title="Remover foto"
+                  className="sidebar-icon-btn"
+                  style={{ width: '44px', height: '44px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)' }}
+                >
+                  <Trash2 size={16} />
+                </button>
+              )}
+              <label
+                className="btn"
+                style={{ width: '44px', height: '44px', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+                title="Fazer Upload da Foto do Post"
+                aria-label="Upload da foto do perfil"
+              >
                 <Upload size={16} color="var(--text-secondary)" />
-                <input 
-                  type="file" 
-                  accept="image/*" 
+                <input
+                  type="file"
+                  accept="image/*"
                   style={{ display: 'none' }}
                   onChange={(e) => {
                     const file = e.target.files[0];
-                    if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (event) => onChange('postOwnerAvatar', event.target.result);
-                      reader.readAsDataURL(file);
+                    if (!file) return;
+                    if (!file.type.startsWith('image/')) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      alert('Imagem muito grande. Limite: 5MB.');
+                      e.target.value = '';
+                      return;
                     }
+                    const reader = new FileReader();
+                    reader.onload = (event) => onChange('postOwnerAvatar', event.target.result);
+                    reader.readAsDataURL(file);
+                    e.target.value = '';
                   }}
                 />
               </label>
