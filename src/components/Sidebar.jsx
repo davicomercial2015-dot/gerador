@@ -369,9 +369,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           <div className="section-title">Postagem Original (Seu Perfil)</div>
           
           <div className="form-group">
-            <label>Nome do Seu Perfil</label>
+            <label htmlFor="post-owner-name">Nome do Seu Perfil</label>
             <input 
               type="text" 
+              id="post-owner-name"
               className="form-control" 
               value={data.postOwnerName} 
               onChange={(e) => onChange('postOwnerName', e.target.value)} 
@@ -379,16 +380,17 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           </div>
 
           <div className="form-group">
-            <label>Foto do Seu Perfil (URL ou Upload)</label>
+            <label htmlFor="post-owner-avatar">Foto do Seu Perfil (URL ou Upload)</label>
             <div style={{ display: 'flex', gap: '8px' }}>
               <input 
                 type="text" 
+                id="post-owner-avatar"
                 className="form-control" 
                 value={data.postOwnerAvatar} 
                 onChange={(e) => onChange('postOwnerAvatar', e.target.value)} 
                 style={{ flex: 1 }}
               />
-              <label className="btn" style={{ width: '40px', height: '40px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto do Post">
+              <label className="btn" style={{ width: '44px', height: '44px', cursor: 'pointer', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0, flexShrink: 0 }} title="Fazer Upload da Foto do Post" aria-label="Upload da foto do perfil">
                 <Upload size={16} color="var(--text-secondary)" />
                 <input 
                   type="file" 
@@ -408,9 +410,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           </div>
 
           <div className="form-group">
-            <label>Texto da Postagem</label>
+            <label htmlFor="post-text">Texto da Postagem</label>
             <textarea 
               className="form-control" 
+              id="post-text"
               value={data.postText} 
               onChange={(e) => onChange('postText', e.target.value)} 
               style={{ minHeight: '60px' }}
@@ -418,9 +421,10 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
           </div>
 
           <div className="form-group">
-            <label>Número de Likes do Comentário</label>
+            <label htmlFor="post-likes">Número de Likes do Comentário</label>
             <input 
               type="text" 
+              id="post-likes"
               className="form-control" 
               value={data.likes} 
               onChange={(e) => onChange('likes', e.target.value)} 

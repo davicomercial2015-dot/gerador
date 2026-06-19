@@ -64,6 +64,13 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Ocultar barra de rolagem em navegadores baseados em Webkit (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  display: none;
 }
 
 body {
@@ -92,14 +99,6 @@ body {
   padding: var(--space-lg);
   z-index: 10;
   gap: var(--space-2xs);
-}
-
-.sidebar::-webkit-scrollbar {
-  width: 6px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-  background: var(--bg-tertiary);
-  border-radius: 4px;
 }
 
 .preview-area {
