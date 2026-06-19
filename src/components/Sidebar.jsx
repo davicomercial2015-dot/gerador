@@ -1,9 +1,31 @@
 import React, { useRef } from 'react';
-import { Settings, MessageCircle, Camera, MessageSquare, Upload, Plus, Trash2, Image as ImageIcon, Download } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { MessageCircle, Camera, MessageSquare, Upload, Plus, Trash2, Image as ImageIcon, Home, CreditCard, LogOut } from 'lucide-react';
 
 const Sidebar = ({ activeTab, setActiveTab, data, onChange, onExport }) => {
+  const navigate = useNavigate();
+
   return (
     <div className="sidebar">
+      {/* Logo + Nav */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => navigate('/')}>
+          <img src="/download.svg" alt="Logo" style={{ width: '24px', height: '24px' }} />
+          <span style={{ fontSize: '16px', fontWeight: '700', color: 'var(--text-primary)' }}>Depo Fast</span>
+        </div>
+        <div style={{ display: 'flex', gap: '4px' }}>
+          <button onClick={() => navigate('/')} aria-label="Início" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px', borderRadius: '6px', display: 'flex', alignItems: 'center' }} title="Início">
+            <Home size={16} />
+          </button>
+          <button onClick={() => navigate('/pricing')} aria-label="Planos" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px', borderRadius: '6px', display: 'flex', alignItems: 'center' }} title="Planos">
+            <CreditCard size={16} />
+          </button>
+          <button onClick={() => { localStorage.removeItem('depofast_token'); navigate('/login'); }} aria-label="Sair" style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '6px', borderRadius: '6px', display: 'flex', alignItems: 'center' }} title="Sair">
+            <LogOut size={16} />
+          </button>
+        </div>
+      </div>
+
       <div className="tabs" role="tablist">
         <div 
           className={`tab ${activeTab === 'whatsapp' ? 'active' : ''}`}

@@ -96,41 +96,6 @@ function Editor() {
 
   return (
     <div className="editor-layout">
-      {/* Barra de Navegação Superior */}
-      <nav className="editor-nav">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }} onClick={() => navigate('/')}>
-          <img src="/download.svg" alt="Logo" style={{ width: '28px', height: '28px' }} />
-          <span style={{ fontSize: '18px', fontWeight: 'bold', color: 'var(--text-primary)', fontFamily: "'Inter', sans-serif" }}>Depo Fast</span>
-        </div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          <button 
-            className="btn" 
-            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', cursor: 'pointer' }} 
-            onClick={() => navigate('/')}
-          >
-            Início
-          </button>
-          <button 
-            className="btn" 
-            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', cursor: 'pointer' }} 
-            onClick={() => navigate('/pricing')}
-          >
-            Planos
-          </button>
-          <button 
-            className="btn" 
-            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', cursor: 'pointer', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#ef4444' }} 
-            onClick={() => {
-              localStorage.removeItem('depofast_token');
-              navigate('/login');
-            }}
-          >
-            Sair
-          </button>
-        </div>
-      </nav>
-
       <div className="app-container">
         <Sidebar 
           activeTab={activeTab} 
@@ -152,10 +117,6 @@ function Editor() {
                   Limite gratuito atingido. Assine um plano para continuar.
                 </span>
               )}
-              <button className="btn btn-primary" onClick={handleExport} disabled={isExporting} style={{ padding: '10px 20px', fontSize: '14px', borderRadius: '8px', display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <Download size={16} />
-                {isExporting ? 'Gerando Imagem...' : 'Exportar Imagem'}
-              </button>
             </div>
           </div>
           
@@ -181,6 +142,17 @@ function Editor() {
               {activeTab === 'comment' && <InstaComment data={data} />}
             </div>
           </div>
+
+          {/* Botão Flutuante Redondo de Download (FAB) */}
+          <button 
+            className="btn-floating" 
+            onClick={handleExport} 
+            disabled={isExporting} 
+            title={isExporting ? 'Gerando imagem...' : 'Exportar Imagem'}
+            aria-label="Exportar Imagem"
+          >
+            <Download size={24} />
+          </button>
         </main>
       </div>
     </div>

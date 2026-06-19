@@ -605,3 +605,51 @@ input:checked + .toggle-slider:before {
   }
 }
 
+/* Botão Flutuante Redondo de Download (FAB) */
+.btn-floating {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  color: var(--text-primary);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transition: all 0.25s var(--ease-out-quart);
+  z-index: 70;
+}
+
+.btn-floating:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--accent-hover), var(--accent-primary));
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(139, 92, 246, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.btn-floating:active:not(:disabled) {
+  transform: translateY(0) scale(0.96);
+}
+
+.btn-floating:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+  opacity: 0.6;
+}
+
+@media (max-width: 1024px) {
+  .btn-floating {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 100;
+  }
+}
+
