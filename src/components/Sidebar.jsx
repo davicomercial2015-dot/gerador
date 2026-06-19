@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Camera, MessageSquare, Upload, Plus, Trash2, Image as ImageIcon, Home, CreditCard, LogOut } from 'lucide-react';
+import CollapsibleSection from './CollapsibleSection';
 
 const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota }) => {
   const navigate = useNavigate();
@@ -106,267 +107,302 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
         </div>
       </div>
 
-      <div className="section-title">Perfil do Remetente / Comentarista</div>
-      
-      <div className="form-group">
-        <label htmlFor="user-name">Nome do Usuário</label>
-        <input 
-          type="text" 
-          id="user-name"
-          className="form-control" 
-          value={data.name} 
-          onChange={(e) => onChange('name', e.target.value)} 
-          placeholder="Ex: Neymar Jr"
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="user-avatar">Foto de Perfil (URL ou Upload)</label>
-        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-          <input
-            type="text"
-            id="user-avatar"
-            className="form-control"
-            value={data.avatar}
-            onChange={(e) => onChange('avatar', e.target.value)}
-            placeholder="https://..."
-            style={{ flex: 1, height: '44px' }}
+      {/* Perfil do Remetente */}
+      <CollapsibleSection title="Perfil do Remetente" defaultOpen={true}>
+        <div className="form-group">
+          <label htmlFor="user-name">Nome do Usuário</label>
+          <input 
+            type="text" 
+            id="user-name"
+            className="form-control" 
+            value={data.name} 
+            onChange={(e) => onChange('name', e.target.value)} 
+            placeholder="Ex: Neymar Jr"
           />
-          {data.avatar && (
-            <button
-              type="button"
-              onClick={() => onChange('avatar', '')}
-              aria-label="Remover foto de perfil"
-              title="Remover foto"
-              className="sidebar-icon-btn"
-              style={{ width: '44px', height: '44px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)' }}
-            >
-              <Trash2 size={16} />
-            </button>
-          )}
-          <label
-            className="btn"
-            style={{ width: '44px', height: '44px', cursor: 'pointer', padding: 0, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            title="Fazer Upload da Foto"
-            aria-label="Upload da foto de perfil"
-          >
-            <Upload size={16} color="var(--text-secondary)" />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="user-avatar">Foto de Perfil (URL ou Upload)</label>
+          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
             <input
-              type="file"
-              accept="image/*"
-              style={{ display: 'none' }}
-              onChange={(e) => {
-                const file = e.target.files[0];
-                if (!file) return;
-                // Validate file size (max 5MB) and type
-                if (!file.type.startsWith('image/')) return;
-                if (file.size > 5 * 1024 * 1024) {
-                  alert('Imagem muito grande. Limite: 5MB.');
-                  e.target.value = '';
-                  return;
-                }
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                  onChange('avatar', event.target.result);
-                };
-                reader.readAsDataURL(file);
-                e.target.value = '';
-              }}
+              type="text"
+              id="user-avatar"
+              className="form-control"
+              value={data.avatar}
+              onChange={(e) => onChange('avatar', e.target.value)}
+              placeholder="https://..."
+              style={{ flex: 1, height: '44px' }}
             />
+            {data.avatar && (
+              <button
+                type="button"
+                onClick={() => onChange('avatar', '')}
+                aria-label="Remover foto de perfil"
+                title="Remover foto"
+                className="sidebar-icon-btn"
+                style={{ width: '44px', height: '44px', backgroundColor: 'var(--bg-tertiary)', border: '1px solid var(--border-color)' }}
+              >
+                <Trash2 size={16} />
+              </button>
+            )}
+            <label
+              className="btn"
+              style={{ width: '44px', height: '44px', cursor: 'pointer', padding: 0, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              title="Fazer Upload da Foto"
+              aria-label="Upload da foto de perfil"
+            >
+              <Upload size={16} color="var(--text-secondary)" />
+              <input
+                type="file"
+                accept="image/*"
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  if (!file.type.startsWith('image/')) return;
+                  if (file.size > 5 * 1024 * 1024) {
+                    alert('Imagem muito grande. Limite: 5MB.');
+                    e.target.value = '';
+                    return;
+                  }
+                  const reader = new FileReader();
+                  reader.onload = (event) => {
+                    onChange('avatar', event.target.result);
+                  };
+                  reader.readAsDataURL(file);
+                  e.target.value = '';
+                }}
+              />
+            </label>
+          </div>
+          {/* Avatar Preview */}
+          {data.avatar && (
+            <div style={{ marginTop: '8px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <img src={data.avatar} alt="Preview" style={{ width: '32px', height: '32px', borderRadius: '50%', objectFit: 'cover', border: '1px solid var(--border-color)' }} crossOrigin="anonymous" />
+              <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Pré-visualização do perfil</span>
+            </div>
+          )}
+        </div>
+
+        <div className="toggle-wrapper">
+          <span className="toggle-label" id="verified-label">Conta Verificada (Selo Azul)</span>
+          <label className="toggle-switch">
+            <input 
+              type="checkbox" 
+              checked={data.isVerified} 
+              onChange={(e) => onChange('isVerified', e.target.checked)} 
+              aria-labelledby="verified-label"
+            />
+            <span className="toggle-slider"></span>
           </label>
         </div>
-      </div>
+      </CollapsibleSection>
 
-      <div className="toggle-wrapper">
-        <span className="toggle-label" id="verified-label">Conta Verificada (Selo Azul)</span>
-        <label className="toggle-switch">
-          <input 
-            type="checkbox" 
-            checked={data.isVerified} 
-            onChange={(e) => onChange('isVerified', e.target.checked)} 
-            aria-labelledby="verified-label"
-          />
-          <span className="toggle-slider"></span>
-        </label>
-      </div>
+      {/* Conteúdo da Conversa */}
+      <CollapsibleSection title="Conteúdo da Conversa" defaultOpen={true}>
+        {activeTab === 'comment' ? (
+          <div className="form-group">
+            <label htmlFor="comment-text">Comentário</label>
+            <textarea 
+              className="form-control" 
+              id="comment-text"
+              value={data.messages[0]?.text || ''} 
+              onChange={(e) => {
+                const newMsgs = [...data.messages];
+                if (!newMsgs[0]) newMsgs.push({ id: Date.now(), type: 'in', text: '', image: null, time: '' });
+                newMsgs[0].text = e.target.value;
+                onChange('messages', newMsgs);
+              }} 
+              placeholder="Digite o comentário..."
+            />
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '12px' }}>
+            {data.messages.map((msg, index) => (
+              <div key={msg.id} className="message-card message-card-enter" style={{ position: 'relative', '--i': Math.min(index, 5) }}>
+                
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Mensagem #{index + 1}</span>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <select 
+                      className="form-control" 
+                      style={{ width: 'auto', padding: '4px 8px', fontSize: '12px', height: '32px' }}
+                      value={msg.type}
+                      aria-label={`Tipo da mensagem ${index + 1}`}
+                      onChange={(e) => {
+                        const newMsgs = [...data.messages];
+                        newMsgs[index].type = e.target.value;
+                        onChange('messages', newMsgs);
+                      }}
+                    >
+                      <option value="in">Recebida</option>
+                      <option value="out">Enviada</option>
+                    </select>
 
-      <div className="section-title">Conteúdo da Conversa</div>
-
-      {activeTab === 'comment' ? (
-        <div className="form-group">
-          <label htmlFor="comment-text">Comentário</label>
-          <textarea 
-            className="form-control" 
-            id="comment-text"
-            value={data.messages[0]?.text || ''} 
-            onChange={(e) => {
-              const newMsgs = [...data.messages];
-              if (!newMsgs[0]) newMsgs.push({ id: Date.now(), type: 'in', text: '', image: null, time: '' });
-              newMsgs[0].text = e.target.value;
-              onChange('messages', newMsgs);
-            }} 
-            placeholder="Digite o comentário..."
-          />
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
-          {data.messages.map((msg, index) => (
-            <div key={msg.id} className="message-card message-card-enter" style={{ position: 'relative', '--i': Math.min(index, 5) }}>
-              
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Mensagem #{index + 1}</span>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                  <select 
-                    className="form-control" 
-                    style={{ width: 'auto', padding: '4px 8px', fontSize: '12px', height: '32px' }}
-                    value={msg.type}
-                    aria-label={`Tipo da mensagem ${index + 1}`}
-                    onChange={(e) => {
-                      const newMsgs = [...data.messages];
-                      newMsgs[index].type = e.target.value;
-                      onChange('messages', newMsgs);
-                    }}
-                  >
-                    <option value="in">Recebida</option>
-                    <option value="out">Enviada</option>
-                  </select>
-
-                  <button 
-                    aria-label={`Remover mensagem ${index + 1}`}
-                    className="btn"
-                    style={{ width: '32px', height: '32px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-                    onClick={() => {
-                      const newMsgs = data.messages.filter(m => m.id !== msg.id);
-                      onChange('messages', newMsgs);
-                    }}
-                    title="Remover Mensagem"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                    <button 
+                      aria-label={`Remover mensagem ${index + 1}`}
+                      className="btn"
+                      style={{ width: '32px', height: '32px', padding: 0, border: '1px solid rgba(239, 68, 68, 0.2)', backgroundColor: 'rgba(239, 68, 68, 0.05)', color: '#ef4444', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                      onClick={() => {
+                        const newMsgs = data.messages.filter(m => m.id !== msg.id);
+                        onChange('messages', newMsgs);
+                      }}
+                      title="Remover Mensagem"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <label htmlFor={`msg-text-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
-                Texto da mensagem {index + 1}
-              </label>
-              <textarea 
-                className="form-control" 
-                id={`msg-text-${msg.id}`}
-                value={msg.text} 
-                onChange={(e) => {
-                  const newMsgs = [...data.messages];
-                  newMsgs[index].text = e.target.value;
-                  onChange('messages', newMsgs);
-                }} 
-                placeholder="Texto da mensagem..."
-                style={{ minHeight: '56px' }}
-              />
-
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <label htmlFor={`msg-time-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
-                  Horário da mensagem {index + 1}
+                <label htmlFor={`msg-text-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+                  Texto da mensagem {index + 1}
                 </label>
-                <input 
-                  type="text" 
-                  id={`msg-time-${msg.id}`}
+                <textarea 
                   className="form-control" 
-                  value={msg.time} 
+                  id={`msg-text-${msg.id}`}
+                  value={msg.text} 
                   onChange={(e) => {
                     const newMsgs = [...data.messages];
-                    newMsgs[index].time = e.target.value;
+                    newMsgs[index].text = e.target.value;
                     onChange('messages', newMsgs);
-                  }}
-                  placeholder="Horário (10:42)"
-                  style={{ flex: 1, height: '36px' }}
+                  }} 
+                  placeholder="Texto da mensagem..."
+                  style={{ minHeight: '56px' }}
                 />
 
-                <label
-                  className="btn"
-                  style={{ width: '36px', height: '36px', cursor: 'pointer', padding: 0, flexShrink: 0 }}
-                  title="Anexar Imagem ao Balão"
-                  aria-label={`Anexar imagem à mensagem ${index + 1}`}
-                >
-                  <ImageIcon size={15} color="var(--text-secondary)" />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <label htmlFor={`msg-time-${msg.id}`} style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)' }}>
+                    Horário da mensagem {index + 1}
+                  </label>
+                  <input 
+                    type="text" 
+                    id={`msg-time-${msg.id}`}
+                    className="form-control" 
+                    value={msg.time} 
                     onChange={(e) => {
-                      const file = e.target.files[0];
-                      if (!file) return;
-                      if (!file.type.startsWith('image/')) return;
-                      if (file.size > 5 * 1024 * 1024) {
-                        alert('Imagem muito grande. Limite: 5MB.');
-                        e.target.value = '';
-                        return;
-                      }
-                      const reader = new FileReader();
-                      reader.onload = (event) => {
-                        const newMsgs = [...data.messages];
-                        newMsgs[index].image = event.target.result;
-                        onChange('messages', newMsgs);
-                      };
-                      reader.readAsDataURL(file);
-                      e.target.value = '';
-                    }}
-                  />
-                </label>
-                
-                {msg.image && (
-                  <button 
-                    className="btn" 
-                    aria-label={`Remover imagem da mensagem ${index + 1}`}
-                    style={{ width: '36px', height: '36px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
-                    onClick={() => {
                       const newMsgs = [...data.messages];
-                      newMsgs[index].image = null;
+                      newMsgs[index].time = e.target.value;
                       onChange('messages', newMsgs);
                     }}
-                    title="Remover Imagem"
+                    placeholder="Horário (10:42)"
+                    style={{ flex: 1, height: '36px' }}
+                  />
+
+                  <label
+                    className="btn"
+                    style={{ width: '36px', height: '36px', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+                    title="Anexar Imagem ao Balão"
+                    aria-label={`Anexar imagem à mensagem ${index + 1}`}
                   >
-                    <Trash2 size={16} />
-                  </button>
+                    <ImageIcon size={15} color="var(--text-secondary)" />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (!file) return;
+                        if (!file.type.startsWith('image/')) return;
+                        if (file.size > 5 * 1024 * 1024) {
+                          alert('Imagem muito grande. Limite: 5MB.');
+                          e.target.value = '';
+                          return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          const newMsgs = [...data.messages];
+                          newMsgs[index].image = event.target.result;
+                          onChange('messages', newMsgs);
+                        };
+                        reader.readAsDataURL(file);
+                        e.target.value = '';
+                      }}
+                    />
+                  </label>
+                  
+                  {msg.image && (
+                    <button 
+                      className="btn" 
+                      aria-label={`Remover imagem da mensagem ${index + 1}`}
+                      style={{ width: '36px', height: '36px', backgroundColor: '#ef444420', borderColor: '#ef444440', color: '#ef4444', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 0 }}
+                      onClick={() => {
+                        const newMsgs = [...data.messages];
+                        newMsgs[index].image = null;
+                        onChange('messages', newMsgs);
+                      }}
+                      title="Remover Imagem"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
+                </div>
+
+                {/* Image Preview */}
+                {msg.image && (
+                  <div style={{ marginTop: '8px', position: 'relative', display: 'inline-block' }}>
+                    <img src={msg.image} alt={`Anexo da mensagem ${index + 1}`} style={{ width: '100%', maxHeight: '100px', objectFit: 'cover', borderRadius: '6px', border: '1px solid var(--border-color)' }} crossOrigin="anonymous" />
+                  </div>
                 )}
               </div>
-            </div>
-          ))}
+            ))}
 
-          <button 
-            className="btn btn-primary" 
-            onClick={() => {
-              const newMsgs = [...data.messages, { id: Date.now(), type: 'in', text: '', image: null, time: '12:00' }];
-              onChange('messages', newMsgs);
-            }}
-            style={{ width: '100%' }}
-          >
-            <Plus size={18} /> Adicionar Mensagem
-          </button>
+            <button 
+              className="btn btn-primary" 
+              onClick={() => {
+                const newMsgs = [...data.messages, { id: Date.now(), type: 'in', text: '', image: null, time: '12:00' }];
+                onChange('messages', newMsgs);
+              }}
+              style={{ width: '100%' }}
+            >
+              <Plus size={18} /> Adicionar Mensagem
+            </button>
+          </div>
+        )}
+      </CollapsibleSection>
+
+      {/* Detalhes do Aparelho */}
+      <CollapsibleSection title="Detalhes do Aparelho" defaultOpen={false}>
+        <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="form-group" style={{ flex: 1 }}>
+            <label htmlFor="device-time">Horário</label>
+            <input 
+              type="text" 
+              id="device-time"
+              className="form-control" 
+              value={data.time} 
+              onChange={(e) => onChange('time', e.target.value)} 
+            />
+          </div>
+          <div className="form-group" style={{ flex: 1 }}>
+            <label htmlFor="device-battery">Bateria (%)</label>
+            <input 
+              type="number" 
+              id="device-battery"
+              className="form-control" 
+              value={data.battery} 
+              onChange={(e) => onChange('battery', e.target.value)} 
+              min="1" max="100"
+            />
+          </div>
         </div>
-      )}
+      </CollapsibleSection>
 
-
-
-      <div className="section-title">Detalhes do Aparelho</div>
-      
+      {/* WhatsApp Header Settings */}
       {activeTab === 'whatsapp' && (
-        <div className="form-group">
-          <label htmlFor="wa-theme">Tema do WhatsApp</label>
-          <select 
-            className="form-control" 
-            id="wa-theme"
-            value={data.waTheme || 'dark'} 
-            onChange={(e) => onChange('waTheme', e.target.value)}
-          >
-            <option value="dark">Modo Escuro (Dark)</option>
-            <option value="light">Modo Claro (Light)</option>
-          </select>
-        </div>
-      )}
+        <CollapsibleSection title="Cabeçalho do WhatsApp" defaultOpen={false}>
+          <div className="form-group">
+            <label htmlFor="wa-theme">Tema do WhatsApp</label>
+            <select 
+              className="form-control" 
+              id="wa-theme"
+              value={data.waTheme || 'dark'} 
+              onChange={(e) => onChange('waTheme', e.target.value)}
+            >
+              <option value="dark">Modo Escuro (Dark)</option>
+              <option value="light">Modo Claro (Light)</option>
+            </select>
+          </div>
 
-      {activeTab === 'whatsapp' && (
-        <>
-          <div className="section-title">Cabeçalho do WhatsApp</div>
-          
           <div style={{ display: 'flex', gap: '12px' }}>
             <div className="form-group" style={{ flex: 1 }}>
               <label htmlFor="wa-carrier">Operadora</label>
@@ -390,13 +426,12 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
               <option value="false">Nenhum (Ocultar)</option>
             </select>
           </div>
-        </>
+        </CollapsibleSection>
       )}
 
+      {/* Instagram Header Settings */}
       {activeTab === 'instagram' && (
-        <>
-          <div className="section-title">Cabeçalho e Perfil (Instagram)</div>
-          
+        <CollapsibleSection title="Cabeçalho do Instagram" defaultOpen={false}>
           <div className="form-group">
             <label htmlFor="ig-username">@ Username (Subtítulo do Topo)</label>
             <input type="text" id="ig-username" className="form-control" value={data.igUsername ?? 'divertido_ludico'} onChange={(e) => onChange('igUsername', e.target.value)} />
@@ -423,37 +458,12 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
               <input type="text" id="ig-posts" className="form-control" value={data.igPosts ?? '120 publicações'} onChange={(e) => onChange('igPosts', e.target.value)} />
             </div>
           </div>
-        </>
+        </CollapsibleSection>
       )}
 
-      <div style={{ display: 'flex', gap: '12px' }}>
-        <div className="form-group" style={{ flex: 1 }}>
-          <label htmlFor="device-time">Horário</label>
-          <input 
-            type="text" 
-            id="device-time"
-            className="form-control" 
-            value={data.time} 
-            onChange={(e) => onChange('time', e.target.value)} 
-          />
-        </div>
-        <div className="form-group" style={{ flex: 1 }}>
-          <label htmlFor="device-battery">Bateria (%)</label>
-          <input 
-            type="number" 
-            id="device-battery"
-            className="form-control" 
-            value={data.battery} 
-            onChange={(e) => onChange('battery', e.target.value)} 
-            min="1" max="100"
-          />
-        </div>
-      </div>
-
+      {/* Postagem Original (Comment tab) */}
       {activeTab === 'comment' && (
-        <>
-          <div className="section-title">Postagem Original (Seu Perfil)</div>
-          
+        <CollapsibleSection title="Postagem Original" defaultOpen={true}>
           <div className="form-group">
             <label htmlFor="post-owner-name">Nome do Seu Perfil</label>
             <input 
@@ -539,7 +549,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
               onChange={(e) => onChange('likes', e.target.value)} 
             />
           </div>
-        </>
+        </CollapsibleSection>
       )}
     </div>
   );

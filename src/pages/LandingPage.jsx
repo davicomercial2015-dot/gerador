@@ -295,15 +295,16 @@ const Feature = ({ text, highlight }) => (
 );
 
 const primaryBtnStyle = {
-  background: 'var(--accent-primary)',
+  background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))',
   color: '#fff',
   border: 'none',
   padding: '12px 20px',
   fontSize: '14px',
-  fontWeight: '600',
+  fontWeight: '700',
   borderRadius: '8px',
   cursor: 'pointer',
   width: '100%',
+  boxShadow: '0 4px 16px oklch(55% 0.25 285 / 0.35)',
 };
 
 const secondaryBtnStyle = {
