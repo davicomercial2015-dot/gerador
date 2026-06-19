@@ -109,8 +109,8 @@ export default function LandingPage() {
           </div>
         </div>
 
-        {/* Right: Product preview */}
-        <div style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center' }}>
+        {/* Right: Product preview — hidden on mobile */}
+        <div className="hero-mockup-hide-mobile" style={{ flex: '1 1 300px', display: 'flex', justifyContent: 'center' }}>
           <img
             src="/1.png"
             alt="Preview do mockup WhatsApp"
