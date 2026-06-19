@@ -106,7 +106,6 @@ function Editor() {
         
         <main className="preview-area">
           <div className="preview-header">
-            <span className="preview-title">Visualização em Tempo Real</span>
             <div className="preview-actions">
               {hasQuota ? (
                 <span className="quota-indicator">

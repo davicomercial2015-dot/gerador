@@ -545,7 +545,7 @@ input:checked + .toggle-slider:before {
   left: 0;
   right: 0;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: var(--space-md) var(--space-xl);
   background: rgba(22, 24, 31, 0.75);
