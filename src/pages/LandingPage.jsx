@@ -100,11 +100,14 @@ export default function LandingPage() {
           <img
             src="/1.png"
             alt="Preview do mockup WhatsApp"
+            className="hero-mockup"
             style={{
               width: '260px',
               borderRadius: '16px',
-              boxShadow: '0 20px 40px -10px rgba(0,0,0,0.6), 0 0 48px -12px oklch(55% 0.25 285 / 0.12)',
+              boxShadow: '0 24px 48px -12px rgba(0,0,0,0.6), 0 0 48px -12px oklch(55% 0.25 285 / 0.12)',
               display: 'block',
+              transform: 'rotate(-3deg)',
+              animation: 'heroFloat 5s ease-in-out infinite',
             }}
           />
         </div>

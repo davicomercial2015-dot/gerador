@@ -987,6 +987,18 @@ input:checked + .toggle-slider:before {
   transform: scale(0.98);
 }
 
+/* Hero mockup floating effect */
+@keyframes heroFloat {
+  0%, 100% { transform: rotate(-3deg) translateY(0); }
+  50% { transform: rotate(-3deg) translateY(-12px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mockup {
+    animation: none !important;
+  }
+}
+
 /* Accessibility: Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,
