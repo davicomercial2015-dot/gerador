@@ -48,7 +48,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
               Você ainda tem <strong style={{ color: 'var(--text-primary)' }}>{remaining}</strong> {remaining === 1 ? 'geração grátis' : 'gerações grátis'}
             </span>
           ) : (
-            <span style={{ color: '#ef4444', fontWeight: '600' }}>
+            <span style={{ color: 'var(--color-error)', fontWeight: '600' }}>
               Limite gratuito atingido. Assine um plano.
             </span>
           )}
@@ -146,7 +146,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
           )}
           <label
             className="btn"
-            style={{ width: '44px', height: '44px', cursor: 'pointer', padding: 0, flexShrink: 0 }}
+            style={{ width: '44px', height: '44px', cursor: 'pointer', padding: 0, flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
             title="Fazer Upload da Foto"
             aria-label="Upload da foto de perfil"
           >
@@ -211,7 +211,7 @@ const Sidebar = ({ activeTab, setActiveTab, data, onChange, remaining, hasQuota 
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '20px' }}>
           {data.messages.map((msg, index) => (
-            <div key={msg.id} className="message-card" style={{ position: 'relative' }}>
+            <div key={msg.id} className="message-card message-card-enter" style={{ position: 'relative', '--i': Math.min(index, 5) }}>
               
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: '12px', fontWeight: 'bold', color: 'var(--text-secondary)' }}>Mensagem #{index + 1}</span>

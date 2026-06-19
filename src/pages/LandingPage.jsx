@@ -1,10 +1,16 @@
 import { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MessageCircle, Camera, MessageSquare, Zap, Shield, CheckCircle2, ArrowRight, Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useReveal } from '../hooks/useReveal';
 
 export default function LandingPage() {
   const navigate = useNavigate();
   const carouselRef = useRef(null);
+
+  const featuresRef = useReveal();
+  const galleryRef = useReveal();
+  const pricingRef = useReveal();
+  const trustRef = useReveal();
 
   const handleStart = () => {
     navigate('/login');
@@ -35,7 +41,7 @@ export default function LandingPage() {
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)' }}>
       
       {/* Header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 6%', borderBottom: '1px solid var(--border-color)' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid var(--border-color)', gap: '12px' }}>
         <div
           onClick={() => navigate('/')}
           style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.01em' }}>
@@ -60,20 +66,20 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(80px, 12vh, 140px) 6% clamp(60px, 8vh, 100px)', textAlign: 'center' }}>
-        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 92, 246, 0.08)', color: 'var(--accent-primary)', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: '500', marginBottom: '32px', border: '1px solid rgba(139, 92, 246, 0.15)' }}>
+      <section style={{ maxWidth: '800px', margin: '0 auto', padding: 'clamp(60px, 10vh, 140px) 20px clamp(40px, 6vh, 100px)', textAlign: 'center' }} className="stagger-children">
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', backgroundColor: 'rgba(139, 92, 246, 0.08)', color: 'var(--accent-primary)', padding: '6px 14px', borderRadius: '6px', fontSize: '13px', fontWeight: '500', marginBottom: '32px', border: '1px solid rgba(139, 92, 246, 0.15)', '--i': 0 }}>
           <Zap size={14} /> Aprovado por +10.000 marqueteiros
         </div>
-        
-        <h1 style={{ fontSize: 'clamp(36px, 6vw, 56px)', fontWeight: '800', lineHeight: '1.08', marginBottom: '20px', color: 'var(--text-primary)', letterSpacing: '-0.025em', textWrap: 'balance' }}>
+
+        <h1 style={{ fontSize: 'clamp(28px, 6vw, 56px)', fontWeight: '800', lineHeight: '1.1', marginBottom: '20px', color: 'var(--text-primary)', letterSpacing: '-0.025em', wordBreak: 'normal', overflowWrap: 'break-word', maxWidth: '100%', '--i': 1 }}>
           Provas sociais ultra-realistas que disparam suas vendas.
         </h1>
-        
-        <p style={{ fontSize: 'clamp(16px, 2.5vw, 18px)', color: 'var(--text-secondary)', maxWidth: '560px', margin: '0 auto 48px auto', lineHeight: '1.6' }}>
+
+        <p style={{ fontSize: 'clamp(16px, 2.5vw, 18px)', color: 'var(--text-secondary)', maxWidth: '560px', margin: '0 auto 48px auto', lineHeight: '1.6', '--i': 2 }}>
           Gere conversas autênticas de WhatsApp, Instagram Direct e comentários. 100% customizável. Sem marca d'água.
         </p>
-        
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap' }}>
+
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', flexWrap: 'wrap', '--i': 3 }}>
           <button onClick={() => document.getElementById('pricing').scrollIntoView({ behavior: 'smooth' })} className="cta-hover" style={{ display: 'flex', alignItems: 'center', gap: '8px', background: 'var(--accent-primary)', color: '#fff', border: 'none', padding: '14px 28px', fontSize: '15px', fontWeight: '600', borderRadius: '8px', cursor: 'pointer' }}>
             Ver Planos <ArrowRight size={18} />
           </button>
@@ -84,15 +90,15 @@ export default function LandingPage() {
       </section>
 
       {/* Features Showcase */}
-      <section style={{ backgroundColor: 'var(--bg-secondary)', padding: 'clamp(64px, 10vh, 100px) 6%', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
+      <section ref={featuresRef} className="reveal" style={{ backgroundColor: 'var(--bg-secondary)', padding: 'clamp(48px, 8vh, 100px) 20px', borderTop: '1px solid var(--border-color)', borderBottom: '1px solid var(--border-color)' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '56px' }}>
             <h2 style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.02em', textWrap: 'balance' }}>Tudo que você precisa em um só lugar</h2>
             <p style={{ fontSize: '16px', color: 'var(--text-secondary)', maxWidth: '500px', margin: '0 auto' }}>Diga adeus ao Photoshop. Crie em segundos diretamente do navegador.</p>
           </div>
 
-          <div className="grid-3-cols">
-            <div className="feature-card">
+          <div className="grid-3-cols stagger-children">
+            <div className="feature-card" style={{ '--i': 0 }}>
               <div style={{ backgroundColor: '#22c55e', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <MessageCircle size={20} color="#fff" />
               </div>
@@ -100,7 +106,7 @@ export default function LandingPage() {
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Simule conversas inteiras com suporte a envio de imagens, fotos de perfil dinâmicas e papel de parede nativo.</p>
             </div>
 
-            <div className="feature-card">
+            <div className="feature-card" style={{ '--i': 1 }}>
               <div style={{ background: 'linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <Camera size={20} color="#fff" />
               </div>
@@ -108,7 +114,7 @@ export default function LandingPage() {
               <p style={{ color: 'var(--text-secondary)', lineHeight: '1.55', fontSize: '14px', margin: 0 }}>Interface idêntica do IG Direct. Altere seguidores, publicações e simule engajamento de influenciadores.</p>
             </div>
 
-            <div className="feature-card">
+            <div className="feature-card" style={{ '--i': 2 }}>
               <div style={{ backgroundColor: 'var(--accent-primary)', width: '40px', height: '40px', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '20px' }}>
                 <MessageSquare size={20} color="#fff" />
               </div>
@@ -120,7 +126,7 @@ export default function LandingPage() {
       </section>
 
       {/* Demonstrations Gallery */}
-      <section style={{ backgroundColor: 'var(--bg-primary)', padding: 'clamp(64px, 10vh, 100px) 6%' }}>
+      <section ref={galleryRef} className="reveal" style={{ backgroundColor: 'var(--bg-primary)', padding: 'clamp(48px, 8vh, 100px) 20px' }}>
         <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.02em', textWrap: 'balance' }}>Resultados tão reais que assustam</h2>
           <p style={{ fontSize: '16px', color: 'var(--text-secondary)', marginBottom: '48px', maxWidth: '500px', margin: '0 auto 48px auto' }}>Veja o nível de detalhe dos mockups. Você controla tudo.</p>
@@ -178,7 +184,7 @@ export default function LandingPage() {
       </section>
 
       {/* Pricing Section */}
-      <section id="pricing" style={{ padding: 'clamp(64px, 10vh, 100px) 6%', backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)' }}>
+      <section id="pricing" ref={pricingRef} className="reveal" style={{ padding: 'clamp(48px, 8vh, 100px) 20px', backgroundColor: 'var(--bg-secondary)', borderTop: '1px solid var(--border-color)' }}>
         <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center', marginBottom: '56px' }}>
           <h2 style={{ fontSize: 'clamp(28px, 4vw, 36px)', fontWeight: '800', marginBottom: '12px', letterSpacing: '-0.02em' }}>
             Escale suas Provas Sociais
@@ -189,10 +195,10 @@ export default function LandingPage() {
         </div>
 
         <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-          <div className="grid-3-cols" style={{ alignItems: 'start' }}>
+          <div className="grid-3-cols stagger-children" style={{ alignItems: 'start' }}>
           
           {/* Plano Iniciante */}
-          <div style={pricingCardStyle}>
+          <div className="pricing-card" style={{ '--i': 0 }}>
             <div style={{ marginBottom: '20px' }}>
               <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: '500', marginBottom: '12px' }}>Starter</h3>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
@@ -213,8 +219,8 @@ export default function LandingPage() {
           </div>
 
           {/* Plano Pro (Destaque) */}
-          <div style={{ ...pricingCardStyle, border: '1px solid var(--accent-primary)', position: 'relative' }}>
-            <div style={{ position: 'absolute', top: '-11px', left: '24px', backgroundColor: 'var(--accent-primary)', color: '#fff', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '4px' }}>
+          <div className="pricing-card featured" style={{ position: 'relative', '--i': 1 }}>
+            <div className="popular-badge">
               Popular
             </div>
             
@@ -239,7 +245,7 @@ export default function LandingPage() {
           </div>
 
           {/* Plano Agência */}
-          <div style={pricingCardStyle}>
+          <div className="pricing-card" style={{ '--i': 2 }}>
             <div style={{ marginBottom: '20px' }}>
               <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: '500', marginBottom: '12px' }}>Scale</h3>
               <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
@@ -264,7 +270,7 @@ export default function LandingPage() {
       </section>
 
       {/* Trust / Bottom CTA */}
-      <section style={{ padding: 'clamp(56px, 8vh, 80px) 6%', textAlign: 'center', backgroundColor: 'var(--bg-primary)' }}>
+      <section ref={trustRef} className="reveal" style={{ padding: 'clamp(40px, 6vh, 80px) 20px', textAlign: 'center', backgroundColor: 'var(--bg-primary)' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '40px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Operadora, Hora e Bateria</div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-secondary)', fontSize: '14px' }}><CheckCircle2 size={16} color="var(--accent-primary)" /> Perfis Verificados</div>
@@ -287,15 +293,6 @@ const Feature = ({ text, highlight }) => (
     {text}
   </li>
 );
-
-const pricingCardStyle = {
-  backgroundColor: 'var(--bg-primary)',
-  border: '1px solid var(--border-color)',
-  borderRadius: '10px',
-  padding: '28px 24px',
-  display: 'flex',
-  flexDirection: 'column',
-};
 
 const primaryBtnStyle = {
   background: 'var(--accent-primary)',

@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import html2canvas from 'html2canvas';
-import { Download, Smartphone } from 'lucide-react';
+import { Download, ChevronDown } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import WhatsApp from '../components/templates/WhatsApp';
 import InstaDirect from '../components/templates/InstaDirect';
@@ -46,6 +46,25 @@ function Editor() {
   const toastTimerRef = useRef(null);
   const navigate = useNavigate();
   const { hasQuota, remaining, incrementQuota } = useQuota();
+  const [hasScroll, setHasScroll] = useState(false);
+
+  const checkScroll = useCallback(() => {
+    if (!mockupRef.current) return;
+    const scrollable = mockupRef.current.querySelector('[style*="overflow-y: auto"], [style*="overflowY"]') 
+      || Array.from(mockupRef.current.querySelectorAll('div')).find(el => el.style.overflowY === 'auto');
+    if (scrollable) {
+      setHasScroll(scrollable.scrollHeight > scrollable.clientHeight + 2);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkScroll();
+    const el = mockupRef.current;
+    if (!el) return;
+    const observer = new MutationObserver(checkScroll);
+    observer.observe(el, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, [activeTab, data.messages, checkScroll]);
 
   useEffect(() => {
     return () => {
@@ -123,27 +142,20 @@ function Editor() {
 
         <main className="preview-area">
           <div className="mockup-wrapper" ref={mockupRef}>
-            {/* Status Bar */}
-            {activeTab === 'comment' && (
-              <>
-                <div className="mockup-header">
-                  <span>{data.time}</span>
-                  <div style={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
-                    <Smartphone size={14} />
-                    <span>{data.battery}%</span>
-                  </div>
-                </div>
-                <div className="mockup-notch"></div>
-              </>
-            )}
-
             {/* Mockup Content */}
-            <div key={activeTab} className="mockup-content-animate" style={{ paddingTop: activeTab === 'comment' ? '44px' : '0', backgroundColor: activeTab === 'whatsapp' ? '#000' : 'var(--ig-bg)' }}>
+            <div key={activeTab} className="mockup-content-animate" style={{ backgroundColor: activeTab === 'whatsapp' ? '#000' : 'var(--ig-bg)' }}>
               {activeTab === 'whatsapp' && <WhatsApp data={data} />}
               {activeTab === 'instagram' && <InstaDirect data={data} />}
               {activeTab === 'comment' && <InstaComment data={data} />}
             </div>
           </div>
+
+          {/* Scroll Arrow Indicator */}
+          {hasScroll && (
+            <div className="mockup-scroll-indicator" aria-hidden="true">
+              <ChevronDown size={20} />
+            </div>
+          )}
 
           {/* Botão Flutuante Redondo de Download (FAB) */}
           <button
@@ -161,23 +173,7 @@ function Editor() {
             <div
               role="status"
               aria-live="polite"
-              style={{
-                position: 'fixed',
-                bottom: '100px',
-                right: '32px',
-                padding: '12px 18px',
-                backgroundColor: toast.type === 'success' ? 'rgba(34, 197, 94, 0.15)' : 'rgba(239, 68, 68, 0.15)',
-                color: toast.type === 'success' ? '#22c55e' : '#ef4444',
-                border: `1px solid ${toast.type === 'success' ? 'rgba(34, 197, 94, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
-                borderRadius: '10px',
-                fontSize: '14px',
-                fontWeight: '500',
-                backdropFilter: 'blur(12px)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.3)',
-                zIndex: 200,
-                animation: 'toastIn 0.3s var(--ease-out-quart)',
-                maxWidth: '320px'
-              }}
+              className={`toast ${toast.type === 'success' ? 'toast-success' : 'toast-error'}`}
             >
               {toast.message}
             </div>

@@ -1,8 +1,14 @@
 import { Heart, Image as ImageIcon } from 'lucide-react';
+import StatusBar from '../StatusBar';
 
 const InstaComment = ({ data }) => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif', backgroundColor: 'var(--ig-bg)', color: 'white' }}>
+      
+      {/* iOS Status Bar */}
+      <div style={{ backgroundColor: '#000' }}>
+        <StatusBar carrier={data.waCarrier} time={data.time} battery={data.battery} color="#fff" />
+      </div>
       
       {/* Header */}
       <div style={{ 

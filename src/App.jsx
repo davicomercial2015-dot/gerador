@@ -16,17 +16,17 @@ function NotFound() {
   const navigate = useNavigate();
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'var(--bg-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-      <main style={{ textAlign: 'center', maxWidth: '420px' }}>
-        <div style={{ fontSize: '72px', fontWeight: '800', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '8px', background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+      <main className="stagger-children" style={{ textAlign: 'center', maxWidth: '420px' }}>
+        <div style={{ fontSize: '72px', fontWeight: '800', letterSpacing: '-0.04em', lineHeight: 1, marginBottom: '8px', background: 'linear-gradient(135deg, var(--accent-primary), var(--accent-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', '--i': 0 }}>
           404
         </div>
-        <h1 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '8px', letterSpacing: '-0.01em' }}>
+        <h1 style={{ fontSize: '22px', fontWeight: '700', color: 'var(--text-primary)', marginBottom: '8px', letterSpacing: '-0.01em', '--i': 1 }}>
           Página não encontrada
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px', lineHeight: 1.5 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px', lineHeight: 1.5, '--i': 2 }}>
           O endereço que você procura não existe ou foi movido.
         </p>
-        <button onClick={() => navigate('/')} className="btn btn-primary" style={{ padding: '12px 24px' }}>
+        <button onClick={() => navigate('/')} className="btn btn-primary" style={{ padding: '12px 24px', '--i': 3 }}>
           <ArrowLeft size={18} /> Voltar para o início
         </button>
       </main>

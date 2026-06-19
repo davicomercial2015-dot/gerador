@@ -58,10 +58,10 @@ export default function Pricing() {
         </p>
       </div>
 
-      <div className="grid-3-cols" style={{ maxWidth: '1000px', margin: '0 auto', alignItems: 'start' }}>
-        
+      <div className="grid-3-cols stagger-children" style={{ maxWidth: '1000px', margin: '0 auto', alignItems: 'start' }}>
+
         {/* Plano Iniciante */}
-        <div style={pricingCardStyle}>
+        <div className="pricing-card" style={{ '--i': 0 }}>
           <div style={{ marginBottom: '20px' }}>
             <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: '500', marginBottom: '12px' }}>Starter</h3>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
@@ -82,8 +82,8 @@ export default function Pricing() {
         </div>
 
         {/* Plano Pro (Destaque) */}
-        <div style={{ ...pricingCardStyle, border: '1px solid var(--accent-primary)', position: 'relative' }}>
-          <div style={{ position: 'absolute', top: '-11px', left: '24px', backgroundColor: 'var(--accent-primary)', color: '#fff', fontSize: '11px', fontWeight: '600', padding: '3px 10px', borderRadius: '4px' }}>
+        <div className="pricing-card featured" style={{ position: 'relative', '--i': 1 }}>
+          <div className="popular-badge">
             Popular
           </div>
           
@@ -108,7 +108,7 @@ export default function Pricing() {
         </div>
 
         {/* Plano Agência */}
-        <div style={pricingCardStyle}>
+        <div className="pricing-card" style={{ '--i': 2 }}>
           <div style={{ marginBottom: '20px' }}>
             <h3 style={{ fontSize: '16px', color: 'var(--text-secondary)', fontWeight: '500', marginBottom: '12px' }}>Scale</h3>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: '2px' }}>
@@ -140,15 +140,6 @@ const Feature = ({ text, highlight }) => (
     {text}
   </li>
 );
-
-const pricingCardStyle = {
-  backgroundColor: 'var(--bg-primary)',
-  border: '1px solid var(--border-color)',
-  borderRadius: '10px',
-  padding: '28px 24px',
-  display: 'flex',
-  flexDirection: 'column',
-};
 
 const primaryBtnStyle = {
   background: 'var(--accent-primary)',
