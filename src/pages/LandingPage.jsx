@@ -50,7 +50,7 @@ export default function LandingPage() {
       <div className="landing-orb landing-orb-3" />
 
       {/* Header */}
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid var(--border-color)', gap: '12px' }}>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 20px', borderBottom: '1px solid var(--border-color)', gap: '12px', backgroundColor: 'var(--bg-primary)', position: 'sticky', top: 0, zIndex: 50 }}>
         <div
           onClick={() => navigate('/')}
           style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '20px', fontWeight: '700', cursor: 'pointer', letterSpacing: '-0.01em' }}>
